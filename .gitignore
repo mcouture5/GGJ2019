@@ -61,7 +61,7 @@ typings/
 .next
 
 # Build dir
-build/
+build/bundle.js
 
 # project lock
 package-lock.json
