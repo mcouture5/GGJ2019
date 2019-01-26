@@ -29,20 +29,41 @@ export class BinaryInputThingy extends Phaser.GameObjects.Zone {
             boxWidthOffset += 1;
         }
 
-        // Create teabot. Move to box #0.
+        // Create teabot.
         this.teabot = new TeaBot({scene: params.scene, x: 0, y: 0});
         let teabotHeight: number = this.teabot.height;
-        let x: number = this.boxes[0].x;
-        let y: number = this.y + (teabotHeight / 2);
+        let x: number = this.boxes[0].x; // under box #0
+        let y: number = this.y + (teabotHeight / 2); // under center line
         this.teabot.setX(x);
         this.teabot.setY(y);
     }
 
     public update() {
+        // TODO
         this.emit('onInput', 1);
     }
 
-    public askForInput() {
+    /**
+     * Clears everything out and asks for a new input. Once the input is ready, emits "onInput" event with array of
+     * ones and zeroes.
+     */
+    public clearAndAskForInput() {
+        // clear boxes
+        for (let box of this.boxes) {
+            box.setOneOrZero(null);
+        }
 
+        // move teabot to box #0
+        this.moveTeabotToBox(0);
+
+        // TODO
+    }
+
+    /**
+     * Moves the teabot under a certain box number.
+     */
+    private moveTeabotToBox(boxNum: number) {
+        let x: number = this.boxes[boxNum].x;
+        this.teabot.setX(x);
     }
 }
