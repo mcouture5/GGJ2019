@@ -4,6 +4,9 @@ import {OneZeroPlaceholder} from "./OneZeroPlaceholder";
 
 /**
  * Complex class group thingy which holds and manages all the binary input thingies.
+ *
+ * Fires "onChange" event whenever any of the one/zero input values changes. Does not fire on clear. The event passes
+ * over the total value of all the one/zero input boxes.
  */
 export class BinaryInputThingy extends Phaser.GameObjects.Group {
 
@@ -112,16 +115,16 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
     }
 
     /**
-     * Gets the one/zero input values for all the input boxes.
+     * Gets the total value of all the one/zero input boxes.
      */
-    public getOneZeroInputs(): number[] {
-        return this.oneZeroInputs;
+    public getTotalValue(): number {
+        return this.calcTotalValue(this.oneZeroInputs);
     }
 
     /**
      * Clears all the input boxes out.
      */
-    public clearOneZeroInputs() {
+    public clearInputs() {
         // clear boxes back to zero
         for (let i = 0; i < this.boxes.length; i++) {
             this.oneZeroInputs[i] = 0;
@@ -155,5 +158,14 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
         this.oneZeroInputs[this.boxNum] = oneZero;
         this.boxes[this.boxNum].setOneZero(oneZero);
         this.placeholders[this.boxNum].setOneZero(oneZero);
+        this.scene.events.emit('onChange', this.calcTotalValue(this.oneZeroInputs));
+    }
+
+    private calcTotalValue(oneZeroInputs: number[]): number {
+        let totalValue: number = 0;
+        for (let i = 0; i < BinaryInputThingy.PLACEHOLDERS.length; i++) {
+            totalValue += oneZeroInputs[i] * BinaryInputThingy.PLACEHOLDERS[i];
+        }
+        return totalValue;
     }
 }

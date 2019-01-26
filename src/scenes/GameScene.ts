@@ -44,8 +44,8 @@ export class GameScene extends Phaser.Scene {
             y: 300
         });
         setInterval(() => {
-            console.log(this.binaryInput.getOneZeroInputs());
-            this.binaryInput.clearOneZeroInputs();
+            console.log(this.binaryInput.getTotalValue());
+            this.binaryInput.clearInputs();
         }, 5000);
 
 /*
