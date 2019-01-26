@@ -62,3 +62,9 @@ typings/
 
 # Build dir
 build/
+
+# project lock
+package-lock.json
+
+# webstorm junk
+.idea
