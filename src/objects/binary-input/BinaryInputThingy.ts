@@ -6,8 +6,8 @@ import {OneZeroInputBox} from "./OneZeroInputBox";
  */
 export class BinaryInputThingy extends Phaser.GameObjects.Group {
 
-    // the number of boxes
-    private static readonly NUM_BOXES: number = 4;
+    // the placeholder numbers
+    private static readonly PLACEHOLDERS: number[] = [1, 2, 4, 8];
 
     // the X/Y center of this thingy
     private x: number;
@@ -15,6 +15,8 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
 
     // the one/zero input boxes (from right to left)
     private boxes: OneZeroInputBox[];
+    // the placeholder number textboxes
+    private placeholders: Phaser.GameObjects.Text[];
     // the pointer under the active input box
     private pointer: Pointer;
 
@@ -36,20 +38,30 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
         this.x = params.x;
         this.y = params.y;
 
-        // create and add 4 boxes (from right to left)
+        // create and add placeholders and boxes (from right to left)
         this.boxes = [];
-        let boxWidthOffset: number = 1.5; // goes -1.5, -0.5, 0.5, 1.5
-        for (let i = BinaryInputThingy.NUM_BOXES - 1; i >= 0; i--) {
+        this.placeholders = [];
+        let boxWidthOffset: number = -1.5; // goes -1.5, -0.5, 0.5, 1.5
+        for (let i = BinaryInputThingy.PLACEHOLDERS.length - 1; i >= 0; i--) {
             let box = new OneZeroInputBox({scene: params.scene, x: 0, y: 0});
+            let placeholderText: string = BinaryInputThingy.PLACEHOLDERS[i] + '';
+            let placeholder = new Phaser.GameObjects.Text(params.scene, 0, 0, placeholderText, {fontSize: 12});
             let boxWidth: number = box.width;
             let boxHeight: number = box.height;
-            let x: number = this.x + (boxWidth * boxWidthOffset); // across center line using offset
-            let y: number = this.y - (boxHeight / 2); // above center line
-            box.setX(x);
-            box.setY(y);
-            this.boxes.push(box);
+            let boxX: number = this.x + (boxWidth * boxWidthOffset); // across center line using offset
+            let boxY: number = this.y - (boxHeight / 2); // above center line
+            let placeholderWidth: number = placeholder.width;
+            let placeholderX: number = boxX - (placeholderWidth / 2);
+            let placeholderY: number = boxY - (boxHeight);
+            box.setX(boxX);
+            box.setY(boxY);
+            placeholder.setX(placeholderX);
+            placeholder.setY(placeholderY);
+            this.boxes.unshift(box);
+            this.placeholders.unshift(placeholder);
             this.add(box, true);
-            boxWidthOffset -= 1;
+            this.add(placeholder, true);
+            boxWidthOffset += 1;
         }
 
         // create and add pointer
