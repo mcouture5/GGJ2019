@@ -1,5 +1,5 @@
 /**
- * Dumb input box which just displays empty, one, or zero.
+ * A one/zero input box.
  */
 export class OneZeroInputBox extends Phaser.GameObjects.Sprite {
 
@@ -13,9 +13,6 @@ export class OneZeroInputBox extends Phaser.GameObjects.Sprite {
         super(params.scene, params.x, params.y, OneZeroInputBox.SPRITEMAP, OneZeroInputBox.FRAME_ZERO);
     }
 
-    /**
-     * Sets the one/zero value.
-     */
     public setOneZero(oneZero: number) {
         // set appropriate frame
         if (oneZero === 0) {

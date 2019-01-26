@@ -1,5 +1,6 @@
 import {Pointer} from "./Pointer";
 import {OneZeroInputBox} from "./OneZeroInputBox";
+import {OneZeroPlaceholder} from "./OneZeroPlaceholder";
 
 /**
  * Complex class group thingy which holds and manages all the binary input thingies.
@@ -15,8 +16,8 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
 
     // the one/zero input boxes (from right to left)
     private boxes: OneZeroInputBox[];
-    // the placeholder number textboxes
-    private placeholders: Phaser.GameObjects.Text[];
+    // the placeholder number textbox above each input box
+    private placeholders: OneZeroPlaceholder[];
     // the pointer under the active input box
     private pointer: Pointer;
 
@@ -44,8 +45,8 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
         let boxWidthOffset: number = -1.5; // goes -1.5, -0.5, 0.5, 1.5
         for (let i = BinaryInputThingy.PLACEHOLDERS.length - 1; i >= 0; i--) {
             let box = new OneZeroInputBox({scene: params.scene, x: 0, y: 0});
-            let placeholderText: string = BinaryInputThingy.PLACEHOLDERS[i] + '';
-            let placeholder = new Phaser.GameObjects.Text(params.scene, 0, 0, placeholderText, {fontSize: 12});
+            let text: string = BinaryInputThingy.PLACEHOLDERS[i] + '';
+            let placeholder = new OneZeroPlaceholder({scene: params.scene, x: 0, y: 0, text: text});
             let boxWidth: number = box.width;
             let boxHeight: number = box.height;
             let boxX: number = this.x + (boxWidth * boxWidthOffset); // across center line using offset
@@ -125,6 +126,7 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
         for (let i = 0; i < this.boxes.length; i++) {
             this.oneZeroInputs[i] = 0;
             this.boxes[i].setOneZero(0);
+            this.placeholders[i].setOneZero(0);
         }
 
         // reset pointer
@@ -152,5 +154,6 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
     private updatePointedToBox(oneZero: number) {
         this.oneZeroInputs[this.boxNum] = oneZero;
         this.boxes[this.boxNum].setOneZero(oneZero);
+        this.placeholders[this.boxNum].setOneZero(oneZero);
     }
 }
