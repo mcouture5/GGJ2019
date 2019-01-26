@@ -29,6 +29,21 @@
                 "type": "image",
                 "key": "tealeaf",
                 "url": "assets/images/tealeaf.png"
+            },
+            {
+                "type": "image",
+                "key": "up",
+                "url": "assets/images/up.png"
+            },
+            {
+                "type": "image",
+                "key": "down",
+                "url": "assets/images/down.png"
+            },
+            {
+                "type": "image",
+                "key": "teabot",
+                "url": "assets/images/teabot.png"
             }
         ]
     }

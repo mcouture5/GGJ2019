@@ -3,18 +3,17 @@
  */
 export class OneZeroInputBox extends Phaser.GameObjects.Sprite {
 
-    // the textures for empty, one, or two
-    private static readonly TEXTURE_EMPTY: string = 'foo';
-    private static readonly TEXTURE_ONE: string = 'one';
-    private static readonly TEXTURE_ZERO: string = 'zero';
+    // the textures for one/zero
+    private static readonly TEXTURE_ONE: string = 'up';
+    private static readonly TEXTURE_ZERO: string = 'down';
 
-    // The one/zero value. Null means empty.
+    // the one/zero value
     private oneOrZero: number;
 
     constructor(params: {scene: Phaser.Scene, x: number, y: number}) {
-        // start empty
-        super(params.scene, params.x, params.y, OneZeroInputBox.TEXTURE_EMPTY);
-        this.oneOrZero = null;
+        // start zero
+        super(params.scene, params.x, params.y, OneZeroInputBox.TEXTURE_ZERO);
+        this.oneOrZero = 0;
     }
 
     /**
@@ -24,13 +23,10 @@ export class OneZeroInputBox extends Phaser.GameObjects.Sprite {
         this.oneOrZero = oneOrZero;
 
         // set appropriate texture based on one/zero value
-        if (this.oneOrZero === null) {
-            this.setTexture(OneZeroInputBox.TEXTURE_EMPTY);
-        }
-        else if (this.oneOrZero === 1) {
+        if (this.oneOrZero === 1) {
             this.setTexture(OneZeroInputBox.TEXTURE_ONE);
         }
-        else if (this.oneOrZero === 1) {
+        else if (this.oneOrZero === 0) {
             this.setTexture(OneZeroInputBox.TEXTURE_ZERO);
         }
     }
