@@ -8,8 +8,8 @@ import { GameScene } from './scenes/GameScene';
 // main game configuration
 const config: GameConfig = {
   title: 'TeaBot',
-  width: 800,
-  height: 600,
+  width: 1024,
+  height: 768,
   type: Phaser.AUTO,
   parent: 'game',
   scene: [Boot, MainMenu, GameScene],

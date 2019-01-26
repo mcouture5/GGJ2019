@@ -1,0 +1,33 @@
+{
+    "ingredients": {
+        "tealeaf": {
+            "name": "Tea Leaf",
+            "key": "tealeaf",
+            "value": 4
+        },
+        "sugar": {
+            "name": "Sugar",
+            "key": "sugar",
+            "value": 3
+        },
+        "water": {
+            "name": "Water",
+            "key": "water",
+            "value": 7
+        }
+    },
+    "recipes": [
+        {
+            "name": "Test",
+            "ingredients": ["tealeaf", "tealeaf", "tealeaf"]
+        }, 
+        {
+            "name": "Green Tea",
+            "ingredients": ["tealeaf", "sugar", "water"]
+        }, 
+        {
+            "name": "Black Tea",
+            "ingredients": ["tealeaf", "tealeaf", "sugar", "water"]
+        }
+    ]
+}

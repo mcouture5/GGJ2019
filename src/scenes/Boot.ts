@@ -44,8 +44,11 @@ export class Boot extends Phaser.Scene {
          */
         this.load.pack('preload', './assets/pack.json');
 
-        //Load the tea ingredients and recipies
-        this.load.json('recipies', './assets/recipies.json');
+        //Load the tea ingredients and recipes
+        this.load.json('recipes', './assets/recipes.json');
+        
+        // Load the tutorial steps
+        this.load.json('tutorial', './assets/tutorial.json');
     }
 
     update() {
