@@ -7,7 +7,7 @@ import { GameScene } from './scenes/GameScene';
 
 // main game configuration
 const config: GameConfig = {
-  title: 'Boilerplate',
+  title: 'TeaBot',
   width: 800,
   height: 600,
   type: Phaser.AUTO,
@@ -27,7 +27,7 @@ const config: GameConfig = {
     }
   },
   backgroundColor: '#98d687',
-  render: { pixelArt: true, antialias: false, autoResize: false }
+  render: { pixelArt: false, antialias: true, autoResize: true }
 };
 
 // game class

@@ -8,6 +8,11 @@
       },
       {
         "type": "image",
+        "key": "mainmenu-bg",
+        "url": "assets/images/mainmenu.jpg"
+      },
+      {
+        "type": "image",
         "key": "bird",
         "url": "assets/images/bird.png"
       },
