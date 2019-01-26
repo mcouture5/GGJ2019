@@ -1,0 +1,25 @@
+{
+  "preload": {
+    "files": [
+      {
+        "type": "image",
+        "key": "background",
+        "url": "assets/images/bg.png"
+      },
+      {
+        "type": "image",
+        "key": "bird",
+        "url": "assets/images/bird.png"
+      },
+      {
+        "type": "spritesheet",
+        "key": "pipe",
+        "url": "assets/images/pipe.png",
+        "frameConfig": {
+          "frameWidth": 20,
+          "frameHeight": 20
+        }
+      }
+    ]
+  }
+}
