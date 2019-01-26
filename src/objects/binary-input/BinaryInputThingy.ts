@@ -56,7 +56,7 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
             let boxY: number = this.y - (boxHeight / 2); // above center line
             let placeholderWidth: number = placeholder.width;
             let placeholderX: number = boxX - (placeholderWidth / 2);
-            let placeholderY: number = boxY - (boxHeight);
+            let placeholderY: number = boxY - (boxHeight) + 4;
             box.setX(boxX);
             box.setY(boxY);
             placeholder.setX(placeholderX);
@@ -164,7 +164,7 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
     private calcTotalValue(oneZeroInputs: number[]): number {
         let totalValue: number = 0;
         for (let i = 0; i < BinaryInputThingy.PLACEHOLDERS.length; i++) {
-            totalValue += oneZeroInputs[i] * BinaryInputThingy.PLACEHOLDERS[i];
+            totalValue += (oneZeroInputs[i] * BinaryInputThingy.PLACEHOLDERS[i]);
         }
         return totalValue;
     }

@@ -3,15 +3,27 @@
     src: url('../../assets/fonts/TheBough-Condensed.ttf') format('truetype');
 }
 
+@font-face {
+    font-family: 'Digital';
+    src: url('../../assets/fonts/DJB-Get-Digital.ttf') format('truetype');
+}
+
 body {
     font-size: 10px;
     color: black;
     background-color: #ffffff;
 }
 
-#hidden {
+.hidden {
     font-size: 0;
+}
+
+.bough {
     font-family: 'Bough';
+}
+
+.digital {
+    font-family: 'Digital';
 }
 
 body div.container {

@@ -53,7 +53,8 @@ export class MainMenu extends Phaser.Scene {
 
     update() {
         if (this.startKey.isDown) {
-            this.cameras.main.fadeOut(2000, 255, 255, 255);
+            //2000
+            this.cameras.main.fadeOut(2, 255, 255, 255);
         }
     }
 }

@@ -26,7 +26,7 @@ const config: GameConfig = {
       debug: false
     }
   },
-  backgroundColor: '#98d687',
+  backgroundColor: '#fff',
   render: { pixelArt: false, antialias: true, autoResize: true }
 };
 

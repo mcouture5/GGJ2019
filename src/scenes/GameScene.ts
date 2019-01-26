@@ -1,5 +1,5 @@
 import { BinaryInputThingy } from '../objects/binary-input/BinaryInputThingy';
-import { RecipeThingy } from '../objects/recipe/RecipeThingy';
+import { RecipeThingy, IRecipe, IIngredient } from '../objects/recipe/RecipeThingy';
 import { Scene } from 'phaser';
 
 enum GameState {
@@ -11,14 +11,17 @@ enum GameState {
 
 export class GameScene extends Phaser.Scene {
     // objects
-    private bg: Phaser.GameObjects.Sprite;
     private binaryInput: BinaryInputThingy;
     private recipeThingy: RecipeThingy;
+    private currentRecipe: IRecipe;
+    private currentIngredient: IIngredient;
 
     // variables
-    private timer: Phaser.Time.TimerEvent;
+    private waterTimer: Phaser.Time.TimerEvent;
     private score: number;
-    private scoreText: Phaser.GameObjects.Text;
+    private powerText: Phaser.GameObjects.Text;
+    private timeToCoolOff: number;
+    private waterTime: number;
 
     // Tutorial stuff
     private tutorial: {[key: string]: {[key: string]: {[key: string]: string}}}; // hooooly shit
@@ -39,13 +42,15 @@ export class GameScene extends Phaser.Scene {
 
     init(): void {
         // objects
-        this.bg = null;
         this.binaryInput = null;
         this.recipeThingy = null;
+        this.currentRecipe = null;
+        this.currentIngredient = null;
 
         // variables
-        this.timer = undefined;
         this.score = -1;
+        this.timeToCoolOff = 10;
+        this.waterTime = 0;
 
         // First time around always has a tutorial
         this.inTutorial = false;
@@ -61,20 +66,19 @@ export class GameScene extends Phaser.Scene {
         // Get the tutorial form the cache
         this.tutorial = this.cache.json.get('tutorial');
 
-        this.bg = this.add.sprite(400, 300, 'teacup');
+        // Create the background and main scene
+        this.add.sprite(0, 0, 'table').setOrigin(0, 0);
+        this.add.sprite(-1, 170, 'teabot').setOrigin(0, 0);
+        this.add.sprite(600, 500, 'teacup-1').setOrigin(0, 0);
 
         // Create the input box and listen to it
         this.binaryInput = new BinaryInputThingy({
             scene: this,
-            x: 400,
-            y: 300
+            x: 175,
+            y: 655
         });
-        setInterval(() => {
-            console.log(this.binaryInput.getTotalValue());
-            this.binaryInput.clearInputs();
-        }, 5000);
-        this.events.addListener('onInput', (binary: number) => {
-            console.log(binary);
+        this.events.addListener('onChange', (binary: number) => {
+            this.checkInput(binary)
         });
 
         // Create the recipe thingy
@@ -87,12 +91,27 @@ export class GameScene extends Phaser.Scene {
             this.state = GameState.AWAITING_INPUT;
         });
         this.events.addListener(RecipeThingy.COMPLETE, () => {
-            this.state = GameState.GETTING_RECIPE;
+            this.handleCompleteRecipe();
         });
         this.events.addListener(RecipeThingy.ANIMATE, () => {
             this.state = GameState.ANIMATING;
         });
+        this.events.addListener(RecipeThingy.ADDED, () => {
+            this.handleItemAdded();
+        });
+        this.events.addListener(RecipeThingy.GOT_INGREDIENT, (ingredient) => {
+            this.currentIngredient = ingredient;
+        });
+        this.events.addListener(RecipeThingy.GOT_RECIPE, (recipe) => {
+            this.currentRecipe = recipe;
+        });
 
+        // Power text
+        this.powerText = this.add.text(150, 450, '0', {
+            fontFamily: 'Digital',
+            fontSize: 72,
+            color: '#000'
+        });
 /*
         this.scoreText = this.add.text(this.sys.canvas.width / 2 - 14, 30, '0', {
             fontFamily: 'Cavalcade-Shadow',
@@ -110,6 +129,7 @@ export class GameScene extends Phaser.Scene {
         */
 
         // Get the first recipe
+        this.state = GameState.GETTING_RECIPE;
         this.recipeThingy.nextRecipe();
     }
 
@@ -143,6 +163,53 @@ export class GameScene extends Phaser.Scene {
 
     private getNextStep() {
 
+    }
+
+    /**
+     * Checks input for the correct value.
+     */
+    private checkInput(value: number) {
+        if (value == this.currentIngredient.value) {
+            this.recipeThingy.addToTea();
+        }
+    }
+
+    /**
+     * Handles when an item is successfully added.
+     */
+    private handleItemAdded() {
+        // If the item added was the water, start the timer!
+        if (this.currentIngredient.key == 'water') {
+            this.waterTimer = this.time.addEvent({
+                callback: this.coolOff,
+                callbackScope: this,
+                delay: 1000,
+                repeat: this.timeToCoolOff
+            });
+        }
+        this.currentIngredient = null;
+        this.binaryInput.clearInputs();
+    }
+
+    /**
+     * Countdown for the water cooling off. Updates the text.
+     */
+    private coolOff() {
+        this.waterTime++;
+        console.log(this.waterTime);
+        if (this.waterTime >= this.timeToCoolOff) {
+            // Fail conditon
+        }
+    }
+
+    /**
+     * Handle when the recipe is complete
+     */
+    private handleCompleteRecipe() {
+        this.state = GameState.GETTING_RECIPE;
+        this.recipeThingy.nextRecipe();
+        this.waterTime = 0;
+        this.waterTimer.destroy();
     }
 
     private runGame() {

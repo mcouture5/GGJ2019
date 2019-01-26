@@ -13,8 +13,33 @@
             },
             {
                 "type": "image",
-                "key": "teacup",
-                "url": "assets/images/teacup.jpg"
+                "key": "table",
+                "url": "assets/images/table.png"
+            },
+            {
+                "type": "image",
+                "key": "teabot",
+                "url": "assets/images/teabot.png"
+            },
+            {
+                "type": "image",
+                "key": "teacup-1",
+                "url": "assets/images/cup1.png"
+            },
+            {
+                "type": "image",
+                "key": "teacup-1",
+                "url": "assets/images/cup2.png"
+            },
+            {
+                "type": "image",
+                "key": "teasteam-1",
+                "url": "assets/images/teasteam1.png"
+            },
+            {
+                "type": "image",
+                "key": "teasteam-1",
+                "url": "assets/images/teasteam2.png"
             },
             {
                 "type": "spritesheet",
@@ -33,10 +58,10 @@
             {
                 "type": "spritesheet",
                 "key": "switch",
-                "url": "assets/images/switch.png",
+                "url": "assets/images/toggles.png",
                 "frameConfig": {
-                    "frameWidth": 40,
-                    "frameHeight": 40
+                    "frameWidth": 37,
+                    "frameHeight": 71
                 }
             },
             {
