@@ -5,7 +5,7 @@ export class GameScene extends Phaser.Scene {
     // objects
     private bird: Bird;
     private pipes: Phaser.GameObjects.Group;
-    private bg: Phaser.GameObjects.TileSprite;
+    private bg: Phaser.GameObjects.Sprite;
 
     // variables
     private timer: Phaser.Time.TimerEvent;
@@ -30,8 +30,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     create(): void {
-        this.bg = this.add.tileSprite(0, 0, 800, 600, 'background');
-        this.bg.setScale(4);
+        this.bg = this.add.sprite(400, 300, 'teacup');
 
         this.scoreText = this.add.text(this.sys.canvas.width / 2 - 14, 30, '0', {
             fontFamily: 'Cavalcade-Shadow',
@@ -62,7 +61,6 @@ export class GameScene extends Phaser.Scene {
 
     update(): void {
         if (!this.bird.getDead()) {
-            this.bg.tilePositionX -= 1;
             this.bird.update();
             this.physics.overlap(this.bird, this.pipes, this.hitPipe, null, this);
         } else {

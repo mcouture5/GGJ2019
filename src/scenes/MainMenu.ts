@@ -27,15 +27,15 @@ export class MainMenu extends Phaser.Scene {
         this.cameras.main.setBackgroundColor(0xfff);
 
         this.texts.push(
-            this.add.text(10,10,
+            this.add.text(290,180,
                 'Tea Bot',
                 {
                     'fontFamily': 'Bough',
-                    fontSize: 40,
+                    fontSize: 60,
                     color: '#000'
                 }
             ),
-            this.add.text(10,60,
+            this.add.text(260,280,
                 'Press space to play',
                 {
                     fontFamily: 'Bough',

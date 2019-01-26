@@ -9,7 +9,12 @@
       {
         "type": "image",
         "key": "mainmenu-bg",
-        "url": "assets/images/mainmenu.jpg"
+        "url": "assets/images/mainmenu.png"
+      },
+      {
+        "type": "image",
+        "key": "teacup",
+        "url": "assets/images/teacup.jpg"
       },
       {
         "type": "image",
