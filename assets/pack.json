@@ -41,8 +41,8 @@
             },
             {
                 "type": "image",
-                "key": "teabot",
-                "url": "assets/images/cruddy-teabot.png"
+                "key": "up",
+                "url": "assets/images/up.png"
             }
         ]
     }

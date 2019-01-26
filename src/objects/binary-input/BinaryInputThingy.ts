@@ -1,4 +1,4 @@
-import {TeaBot} from "./TeaBot";
+import {Pointer} from "./Pointer";
 import {OneZeroInputBox} from "./OneZeroInputBox";
 
 /**
@@ -15,8 +15,8 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
 
     // the one/zero input boxes (from right to left)
     private boxes: OneZeroInputBox[];
-    // the teabot under the active input box
-    private teabot: TeaBot;
+    // the pointer under the active input box
+    private pointer: Pointer;
 
     // the active input box number (from right to left)
     private boxNum: number;
@@ -36,7 +36,7 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
         this.x = params.x;
         this.y = params.y;
 
-        // create 4 boxes (from right to left)
+        // create and add 4 boxes (from right to left)
         this.boxes = [];
         let boxWidthOffset: number = 1.5; // goes -1.5, -0.5, 0.5, 1.5
         for (let i = BinaryInputThingy.NUM_BOXES - 1; i >= 0; i--) {
@@ -52,14 +52,14 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
             boxWidthOffset -= 1;
         }
 
-        // create teabot
-        this.teabot = new TeaBot({scene: params.scene, x: 0, y: 0});
-        let teabotHeight: number = this.teabot.height;
+        // create and add pointer
+        this.pointer = new Pointer({scene: params.scene, x: 0, y: 0});
+        let pointerHeight: number = this.pointer.height;
         let x: number = this.boxes[0].x; // under box #0
-        let y: number = this.y + (teabotHeight / 2); // under center line
-        this.teabot.setX(x);
-        this.teabot.setY(y);
-        this.add(this.teabot, true);
+        let y: number = this.y + (pointerHeight / 2); // under center line
+        this.pointer.setX(x);
+        this.pointer.setY(y);
+        this.add(this.pointer, true);
 
         // set up state variables
         this.boxNum = 0;
@@ -91,10 +91,10 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
             this.movePointerRight();
         }
         else if (Phaser.Input.Keyboard.JustDown(this.upKey)) {
-            this.setPointedToBox(1);
+            this.updatePointedToBox(1);
         }
         else if (Phaser.Input.Keyboard.JustDown(this.downKey)) {
-            this.setPointedToBox(0);
+            this.updatePointedToBox(0);
         }
     }
 
@@ -134,10 +134,10 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
 
     private movePointerToBox(boxNum: number) {
         let x: number = this.boxes[boxNum].x;
-        this.teabot.setX(x);
+        this.pointer.setX(x);
     }
 
-    private setPointedToBox(oneZero: number) {
+    private updatePointedToBox(oneZero: number) {
         this.oneZeroInputs[this.boxNum] = oneZero;
         this.boxes[this.boxNum].setOneZero(oneZero);
     }
