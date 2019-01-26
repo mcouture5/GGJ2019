@@ -41,7 +41,7 @@ export class GameScene extends Phaser.Scene {
             x: 400,
             y: 300
         });
-        this.events.addListener('onInput', (binary: number) => {
+        this.binaryInput.addListener('onInput', (binary: number) => {
             console.log(binary);
         });
 /*
