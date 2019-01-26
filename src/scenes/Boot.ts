@@ -43,6 +43,9 @@ export class Boot extends Phaser.Scene {
          * Place ALL files to load in there, separated by sections.
          */
         this.load.pack('preload', './assets/pack.json');
+
+        //Load the tea ingredients and recipies
+        this.load.json('recipies', './assets/recipies.json');
     }
 
     update() {

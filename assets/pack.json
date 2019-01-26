@@ -1,35 +1,35 @@
 {
-  "preload": {
-    "files": [
-      {
-        "type": "image",
-        "key": "background",
-        "url": "assets/images/bg.png"
-      },
-      {
-        "type": "image",
-        "key": "mainmenu-bg",
-        "url": "assets/images/mainmenu.png"
-      },
-      {
-        "type": "image",
-        "key": "teacup",
-        "url": "assets/images/teacup.jpg"
-      },
-      {
-        "type": "image",
-        "key": "bird",
-        "url": "assets/images/bird.png"
-      },
-      {
-        "type": "spritesheet",
-        "key": "pipe",
-        "url": "assets/images/pipe.png",
-        "frameConfig": {
-          "frameWidth": 20,
-          "frameHeight": 20
-        }
-      }
-    ]
-  }
+    "preload": {
+        "files": [
+            {
+                "type": "image",
+                "key": "background",
+                "url": "assets/images/bg.png"
+            },
+            {
+                "type": "image",
+                "key": "mainmenu-bg",
+                "url": "assets/images/mainmenu.png"
+            },
+            {
+                "type": "image",
+                "key": "teacup",
+                "url": "assets/images/teacup.jpg"
+            },
+            {
+                "type": "spritesheet",
+                "key": "pipe",
+                "url": "assets/images/pipe.png",
+                "frameConfig": {
+                "frameWidth": 20,
+                "frameHeight": 20
+                }
+            },
+            {
+                "type": "image",
+                "key": "tealeaf",
+                "url": "assets/images/tealeaf.png"
+            }
+        ]
+    }
 }
