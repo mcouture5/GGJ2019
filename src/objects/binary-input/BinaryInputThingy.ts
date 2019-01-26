@@ -1,15 +1,15 @@
 import {TeaBot} from "./TeaBot";
-import {BinaryInputBox} from "./BinaryInputBox";
+import {OneZeroInputBox} from "./OneZeroInputBox";
 
 /**
  * Complex class group thingy which holds and manages all the binary input thingies.
  */
 export class BinaryInputThingy extends Phaser.GameObjects.Zone {
 
-    private boxes: BinaryInputBox[]; // the binary input boxes (from right to left)
+    private boxes: OneZeroInputBox[]; // the one/zero input boxes (from right to left)
     private teabot: TeaBot; // the teabot under the active input box
     private box: number; // the active input box number (from right to left)
-    private binaryInput: number[]; // the binary input so far
+    private oneZeroInput: number[]; // the one/zero input values so far (null means empty)
 
     constructor(params: {scene: Phaser.Scene, x: number, y: number}) {
         super(params.scene, params.x, params.y);
@@ -18,7 +18,7 @@ export class BinaryInputThingy extends Phaser.GameObjects.Zone {
         this.boxes = [];
         let boxWidthOffset: number = -1.5; // goes -1.5, -0.5, 0.5, 1.5
         for (let i = 3; i >= 0; i--) {
-            let box = new BinaryInputBox({scene: params.scene, x: 0, y: 0});
+            let box = new OneZeroInputBox({scene: params.scene, x: 0, y: 0});
             let boxWidth: number = box.width;
             let boxHeight: number = box.height;
             let x: number = this.x + (boxWidth * boxWidthOffset); // across center line using offset
@@ -40,5 +40,9 @@ export class BinaryInputThingy extends Phaser.GameObjects.Zone {
 
     public update() {
         this.emit('onInput', 1);
+    }
+
+    public askForInput() {
+
     }
 }
