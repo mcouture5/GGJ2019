@@ -1,11 +1,13 @@
 import { Bird } from '../objects/Bird';
 import { Pipe } from '../objects/Pipe';
+import { BinaryInputThingy } from '../objects/binary-input/BinaryInputThingy';
 
 export class GameScene extends Phaser.Scene {
     // objects
     private bird: Bird;
     private pipes: Phaser.GameObjects.Group;
     private bg: Phaser.GameObjects.Sprite;
+    private binaryInput: BinaryInputThingy;
 
     // variables
     private timer: Phaser.Time.TimerEvent;
@@ -23,6 +25,7 @@ export class GameScene extends Phaser.Scene {
         this.bird = null;
         this.pipes = this.add.group({ classType: Pipe });
         this.bg = null;
+        this.binaryInput = null;
 
         // variables
         this.timer = undefined;
@@ -32,6 +35,16 @@ export class GameScene extends Phaser.Scene {
     create(): void {
         this.bg = this.add.sprite(400, 300, 'teacup');
 
+        // Create the oinput box and listen to it
+        this.binaryInput = new BinaryInputThingy({
+            scene: this,
+            x: 400,
+            y: 300
+        });
+        this.events.addListener('onInput', (binary: number) => {
+            console.log(binary);
+        });
+/*
         this.scoreText = this.add.text(this.sys.canvas.width / 2 - 14, 30, '0', {
             fontFamily: 'Cavalcade-Shadow',
             fontSize: 40
@@ -57,9 +70,13 @@ export class GameScene extends Phaser.Scene {
             callbackScope: this,
             loop: true
         });
+        */
     }
 
     update(): void {
+        // Update the input thingy every frame
+        this.binaryInput.update();
+        /*
         if (!this.bird.getDead()) {
             this.bird.update();
             this.physics.overlap(this.bird, this.pipes, this.hitPipe, null, this);
@@ -76,6 +93,7 @@ export class GameScene extends Phaser.Scene {
                 this.restartGame();
             }
         }
+        */
     }
 
     private addOnePipe(x, y, frame): void {

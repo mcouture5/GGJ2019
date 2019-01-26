@@ -39,6 +39,6 @@ export class BinaryInputThingy extends Phaser.GameObjects.Zone {
     }
 
     public update() {
-
+        this.scene.events.emit('onInput', 1);
     }
 }
