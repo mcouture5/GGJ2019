@@ -37,15 +37,17 @@ export class GameScene extends Phaser.Scene {
 
         this.bg = this.add.sprite(400, 300, 'teacup');
 
-        // Create the oinput box and listen to it
+        // Create the input box
         this.binaryInput = new BinaryInputThingy({
             scene: this,
             x: 400,
             y: 300
         });
-        this.binaryInput.addListener('onInput', (binary: number) => {
-            console.log(binary);
-        });
+        setInterval(() => {
+            console.log(this.binaryInput.getOneZeroInputs());
+            this.binaryInput.clearOneZeroInputs();
+        }, 5000);
+
 /*
         this.scoreText = this.add.text(this.sys.canvas.width / 2 - 14, 30, '0', {
             fontFamily: 'Cavalcade-Shadow',

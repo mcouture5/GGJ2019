@@ -3,31 +3,29 @@
  */
 export class OneZeroInputBox extends Phaser.GameObjects.Sprite {
 
-    // the textures for one/zero
-    private static readonly TEXTURE_ONE: string = 'up';
-    private static readonly TEXTURE_ZERO: string = 'down';
-
-    // the one/zero value
-    private oneOrZero: number;
+    // the spritemap (frame #0 = zero, frame #1 = one)
+    private static readonly SPRITEMAP: string = 'switch';
+    private static readonly FRAME_ZERO: number = 0;
+    private static readonly FRAME_ONE: number = 1;
 
     constructor(params: {scene: Phaser.Scene, x: number, y: number}) {
-        // start zero
-        super(params.scene, params.x, params.y, OneZeroInputBox.TEXTURE_ZERO);
-        this.oneOrZero = 0;
+        // start at zero
+        super(params.scene, params.x, params.y, OneZeroInputBox.SPRITEMAP, OneZeroInputBox.FRAME_ZERO);
     }
 
     /**
-     * Sets the one/zero value. Null means empty.
+     * Sets the one/zero value.
      */
-    public setOneOrZero(oneOrZero: number) {
-        this.oneOrZero = oneOrZero;
-
-        // set appropriate texture based on one/zero value
-        if (this.oneOrZero === 1) {
-            this.setTexture(OneZeroInputBox.TEXTURE_ONE);
+    public setOneZero(oneZero: number) {
+        // set appropriate frame
+        if (oneZero === 0) {
+            this.setFrame(OneZeroInputBox.FRAME_ZERO);
         }
-        else if (this.oneOrZero === 0) {
-            this.setTexture(OneZeroInputBox.TEXTURE_ZERO);
+        else if (oneZero === 1) {
+            this.setFrame(OneZeroInputBox.FRAME_ONE);
+        }
+        else {
+            throw new Error('WHAT?!?!');
         }
     }
 }

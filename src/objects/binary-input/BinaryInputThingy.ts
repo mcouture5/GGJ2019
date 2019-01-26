@@ -4,31 +4,41 @@ import {OneZeroInputBox} from "./OneZeroInputBox";
 /**
  * Complex class group thingy which holds and manages all the binary input thingies.
  */
-export class BinaryInputThingy extends Phaser.GameObjects.Zone {
+export class BinaryInputThingy extends Phaser.GameObjects.Group {
 
     // the number of boxes
-    private static readonly NUM_BOXES = 4;
+    private static readonly NUM_BOXES: number = 4;
+
+    // the X/Y center of this thingy
+    private x: number;
+    private y: number;
 
     // the one/zero input boxes (from right to left)
     private boxes: OneZeroInputBox[];
     // the teabot under the active input box
     private teabot: TeaBot;
 
-    // The active input box number (from right to left). 0-indexed. If equal to box length, we're done.
+    // the active input box number (from right to left)
     private boxNum: number;
-    // the one/zero input values so far (null means empty)
-    private oneZeroInput: number[];
+    // the one/zero input values for all the input boxes
+    private oneZeroInputs: number[];
 
-    // the one key and zero key
-    private oneKey: Phaser.Input.Keyboard.Key;
-    private zeroKey: Phaser.Input.Keyboard.Key;
+    // the keys
+    private leftKey: Phaser.Input.Keyboard.Key;
+    private rightKey: Phaser.Input.Keyboard.Key;
+    private upKey: Phaser.Input.Keyboard.Key;
+    private downKey: Phaser.Input.Keyboard.Key;
 
     constructor(params: {scene: Phaser.Scene, x: number, y: number}) {
-        super(params.scene, params.x, params.y);
+        super(params.scene);
+
+        // set X/Y center
+        this.x = params.x;
+        this.y = params.y;
 
         // create 4 boxes (from right to left)
         this.boxes = [];
-        let boxWidthOffset: number = -1.5; // goes -1.5, -0.5, 0.5, 1.5
+        let boxWidthOffset: number = 1.5; // goes -1.5, -0.5, 0.5, 1.5
         for (let i = BinaryInputThingy.NUM_BOXES - 1; i >= 0; i--) {
             let box = new OneZeroInputBox({scene: params.scene, x: 0, y: 0});
             let boxWidth: number = box.width;
@@ -38,7 +48,8 @@ export class BinaryInputThingy extends Phaser.GameObjects.Zone {
             box.setX(x);
             box.setY(y);
             this.boxes.push(box);
-            boxWidthOffset += 1;
+            this.add(box, true);
+            boxWidthOffset -= 1;
         }
 
         // create teabot
@@ -48,88 +59,86 @@ export class BinaryInputThingy extends Phaser.GameObjects.Zone {
         let y: number = this.y + (teabotHeight / 2); // under center line
         this.teabot.setX(x);
         this.teabot.setY(y);
+        this.add(this.teabot, true);
 
-        // init state variables
+        // set up state variables
         this.boxNum = 0;
-        this.oneZeroInput = [];
-        for (let i = 0; i < BinaryInputThingy.NUM_BOXES; i++) {
-            this.oneZeroInput.push(null);
+        this.oneZeroInputs = [];
+        for (let i = 0; i < this.boxes.length; i++) {
+            this.oneZeroInputs.push(0);
         }
 
         // set up keys
-        this.oneKey = params.scene.input.keyboard.addKey(
-            Phaser.Input.Keyboard.KeyCodes.ONE
+        this.leftKey = this.scene.input.keyboard.addKey(
+            Phaser.Input.Keyboard.KeyCodes.LEFT
         );
-        this.zeroKey = params.scene.input.keyboard.addKey(
-            Phaser.Input.Keyboard.KeyCodes.ZERO
+        this.rightKey = this.scene.input.keyboard.addKey(
+            Phaser.Input.Keyboard.KeyCodes.RIGHT
+        );
+        this.downKey = this.scene.input.keyboard.addKey(
+            Phaser.Input.Keyboard.KeyCodes.DOWN
+        );
+        this.upKey = this.scene.input.keyboard.addKey(
+            Phaser.Input.Keyboard.KeyCodes.UP
         );
     }
 
     public update() {
-        // if we're done, return early
-        if (this.boxNum >= this.boxes.length) {
-            return;
+        if (Phaser.Input.Keyboard.JustDown(this.leftKey)) {
+            this.movePointerLeft();
         }
-
-        // handle one or zero key
-        if (Phaser.Input.Keyboard.JustUp(this.oneKey)) {
-            this.handleOneOrZero(1);
+        else if (Phaser.Input.Keyboard.JustDown(this.rightKey)) {
+            this.movePointerRight();
         }
-        else if (Phaser.Input.Keyboard.JustUp(this.zeroKey)) {
-            this.handleOneOrZero(0);
+        else if (Phaser.Input.Keyboard.JustDown(this.upKey)) {
+            this.setPointedToBox(1);
         }
-
-        // if we're done, emit "onInput" event
-        if (this.boxNum >= this.boxes.length) {
-            this.emit('onInput', this.oneZeroInput);
+        else if (Phaser.Input.Keyboard.JustDown(this.downKey)) {
+            this.setPointedToBox(0);
         }
     }
 
     /**
-     * Clears everything out and asks for a new input. Once the input is ready, emits "onInput" event with array of
-     * ones and zeroes.
+     * Gets the one/zero input values for all the input boxes.
      */
-    public clearAndAskForInput() {
-        // clear boxes
-        for (let box of this.boxes) {
-            box.setOneOrZero(null);
+    public getOneZeroInputs(): number[] {
+        return this.oneZeroInputs;
+    }
+
+    /**
+     * Clears all the input boxes out.
+     */
+    public clearOneZeroInputs() {
+        // clear boxes back to zero
+        for (let i = 0; i < this.boxes.length; i++) {
+            this.oneZeroInputs[i] = 0;
+            this.boxes[i].setOneZero(0);
         }
 
-        // move teabot to box #0
-        this.moveTeabotToBox(0);
-
-        // clear state variables
+        // reset pointer
         this.boxNum = 0;
-        this.oneZeroInput = [];
-        for (let i = 0; i < BinaryInputThingy.NUM_BOXES; i++) {
-            this.oneZeroInput.push(null);
-        }
+        this.movePointerToBox(this.boxNum);
     }
 
-    /**
-     * Handles an incoming one or zero.
-     */
-    private handleOneOrZero(oneZero: number) {
-        // update box
-        this.boxes[this.boxNum].setOneOrZero(oneZero);
-
-        // update one/zero input
-        this.oneZeroInput[this.boxNum] = oneZero;
-
-        // move to next box
+    private movePointerLeft() {
         this.boxNum++;
-
-        // if we haven't run out of boxes, move teabot to next box
-        if (this.boxNum < this.boxes.length) {
-            this.moveTeabotToBox(this.boxNum);
-        }
+        this.boxNum = Math.min(this.boxNum, this.boxes.length - 1);
+        this.movePointerToBox(this.boxNum);
     }
 
-    /**
-     * Moves the teabot under a certain box number. If
-     */
-    private moveTeabotToBox(boxNum: number) {
+    private movePointerRight() {
+        this.boxNum--;
+        this.boxNum = Math.max(this.boxNum, 0);
+        this.movePointerToBox(this.boxNum);
+    }
+
+    private movePointerToBox(boxNum: number) {
         let x: number = this.boxes[boxNum].x;
         this.teabot.setX(x);
+    }
+
+    private setPointedToBox(oneZero: number) {
+        this.oneZeroInputs[this.boxNum] = oneZero;
+        this.boxes[this.boxNum].setOneZero(oneZero);
     }
 }

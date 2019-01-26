@@ -31,19 +31,18 @@
                 "url": "assets/images/tealeaf.png"
             },
             {
-                "type": "image",
-                "key": "up",
-                "url": "assets/images/up.png"
-            },
-            {
-                "type": "image",
-                "key": "down",
-                "url": "assets/images/down.png"
+                "type": "spritesheet",
+                "key": "switch",
+                "url": "assets/images/switch.png",
+                "frameConfig": {
+                    "frameWidth": 40,
+                    "frameHeight": 40
+                }
             },
             {
                 "type": "image",
                 "key": "teabot",
-                "url": "assets/images/teabot.png"
+                "url": "assets/images/cruddy-teabot.png"
             }
         ]
     }
