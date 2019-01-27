@@ -75,6 +75,7 @@ export class TutorialBox extends Phaser.GameObjects.Group {
                 if (this.waitForSpace) {
                     this.animateSpace();
                 }
+                this.murmurSoundCount = 0;
                 this.printText();
             }
         });
@@ -111,11 +112,11 @@ export class TutorialBox extends Phaser.GameObjects.Group {
 
     
     private printText() {
-        if (this.murmurSoundCount > 7) {
-            this.murmurSoundCount = 0;
+        if (this.murmurSoundCount <= 0) {
+            this.murmurSoundCount = 100;
             this.murmurSound.play();
         }
-        this.murmurSoundCount++;
+        this.murmurSoundCount--;
 
         this.speaking = true;
         let currentlyPrinted = this.text.text;
