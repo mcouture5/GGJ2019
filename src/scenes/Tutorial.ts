@@ -14,10 +14,6 @@ interface IAction {
     data: any;
 }
 
-interface IStepData {
-    sequence: IAction[];
-}
-
 /**
  * Tutorial.
  */
@@ -41,14 +37,13 @@ export class Tutorial extends Phaser.Scene {
     private speechBubble: Phaser.GameObjects.Sprite;
     private minitb: Phaser.GameObjects.Sprite;
     private speechBox: TutorialBox;
+    private powerText: Phaser.GameObjects.Text;
 
     // TUT state
     private state: TutorialState;
-    private tutorialData: IStepData[];
-    private tutorialStep: number;
-    private tbotCommand: number;
-    private speech: string;
-    private sequenceIndex: number;
+    private tutorialData: IAction[];
+    private actionIndex: number;
+    private modal: Phaser.GameObjects.Shape;
 
     constructor() {
         super({
@@ -69,10 +64,7 @@ export class Tutorial extends Phaser.Scene {
         // starts fading
         this.fading = true;
 
-        this.tutorialStep = 0;
-        this.tbotCommand = 0;
-        this.speech = '';
-        this.sequenceIndex = 0;
+        this.actionIndex = 0;
     }
 
     create() {
@@ -94,15 +86,53 @@ export class Tutorial extends Phaser.Scene {
         this.steam = this.add.sprite(TEACUP_POS.active.x, 0, 'steam').setOrigin(0, 0).setAlpha(0);
         this.speechBubble = this.add.sprite(350, 150, 'speechbubble').setOrigin(0, 0).setAlpha(0);
 
+        this.recipeThingy = new RecipeThingy({scene: this, tutorial: true});
+        // Listen for recipe events
+        this.events.addListener(RecipeThingy.GETTING_RECIPE, () => {
+        });
+        this.events.addListener(RecipeThingy.READY, () => {
+        });
+        this.events.addListener(RecipeThingy.COMPLETE, () => {
+            this.completeRecipe();
+        });
+        this.events.addListener(RecipeThingy.ANIMATE, () => {
+        });
+        this.events.addListener(RecipeThingy.ADDED, () => {
+            this.ingredientAdded();
+        });
+        this.events.addListener(RecipeThingy.GOT_INGREDIENT, (ingredient) => {
+            this.currentIngredient = ingredient;
+            // Show speech bubble
+            this.tweens.add({
+                targets: [this.speechBubble],
+                duration: 250,
+                alpha: 1
+            });
+            this.nextTbotAction();
+        });
+        this.events.addListener(RecipeThingy.GOT_RECIPE, (recipe) => {
+        });
+        this.events.addListener('TUT:advance', () => {
+            console.log('next');
+            this.nextTbotAction();
+        });
+
         // Create the input box and listen to it
         this.binaryInput = new BinaryInputThingy({
             scene: this,
             x: 175,
             y: 655,
-            numBoxes: 4
+            numBoxes: 5
         });
         this.events.addListener('onChange', (binary: number) => {
             this.checkInput(binary)
+        });
+
+        // Power text
+        this.powerText = this.add.text(115, 450, '0', {
+            fontFamily: 'Digital',
+            fontSize: 72,
+            color: '#efaad1'
         });
 
         // MiniTb
@@ -111,6 +141,9 @@ export class Tutorial extends Phaser.Scene {
         this.events.addListener('advance', () => {
             this.nextTbotAction();
         });
+
+        // Mask
+        this.modal = this.add.rectangle(0, 0, 1024, 768, 0x000000, 0.75).setOrigin(0,0).setAlpha(0).setDepth(50);
 
         // Comic
         this.comic = this.add.sprite(0, 0, 'teaplease').setOrigin(0, 0).setDepth(100);
@@ -121,32 +154,34 @@ export class Tutorial extends Phaser.Scene {
             this.time.addEvent({
                 callback: this.beginTutorial,
                 callbackScope: this,
-                delay: 30, // 3000
+                delay: 3000, // 3000
                 repeat: 0
             });
         });
     }
 
     private checkInput(value: number) {
+        this.powerText.setText(''+value);
+        if (value == this.currentIngredient.value) {
+            this.state = TutorialState.ANIMATING;
+            this.recipeThingy.addToTea();
+        }
     }
 
     update() {
         if (this.fading) {
             // 2000
-            let fadeOutDuration: number = 200;
+            let fadeOutDuration: number = 2000;
             this.cameras.main.fadeIn(fadeOutDuration, 255, 255, 255);
             this.fading = false;
         }
         switch (this.state) {
             case TutorialState.ANIMATING:
-                console.log('ANIMATING...');
                 break;
             case TutorialState.SPEAKING:
-                console.log('SPEAKING...');
                 this.speechBox.update();
                 break;
             case TutorialState.WAITING:
-                console.log('WAITING...');
                 this.binaryInput.update();
                 break;
         }
@@ -164,9 +199,8 @@ export class Tutorial extends Phaser.Scene {
     }
 
     showMask() {
-        let mask = this.add.rectangle(0, 0, 1024, 768, 0x000000, 0.75).setOrigin(0,0).setAlpha(0).setDepth(50);
         this.tweens.add({
-            targets: [mask],
+            targets: [this.modal],
             alpha: 1,
             duration: 1000,
             onComplete: () => {
@@ -175,58 +209,100 @@ export class Tutorial extends Phaser.Scene {
         });
     }
 
+    private completeRecipe() {
+        this.nextTbotAction();
+    }
+
+    private ingredientAdded() {
+        
+    }
+
     private nextTbotAction() {
         // If no steps left, done!
-        if (this.tutorialStep == this.tutorialData.length) {
-            console.log('done');
+        if (this.actionIndex == this.tutorialData.length) {
+            this.cameras.main.fadeOut(1000, 255, 255, 255);
+            this.cameras.main.once('camerafadeoutcomplete', (camera) => {
+                this.scene.start('GameScene');
+            });
         } else {
-            let stepData = this.tutorialData[this.tutorialStep];
-
-            // If nothing left, transition to next step
-            if (this.sequenceIndex == stepData.sequence.length) {
-                // Next step...
-                this.sequenceIndex = 0;
-                this.tutorialStep++;
-                if (this.state == TutorialState.SPEAKING) {
-                    this.speechBox.shutup();
-                    this.state = TutorialState.ANIMATING;
-                }
-                this.nextTbotAction();
-            } else {
-                let action = stepData.sequence[this.sequenceIndex]
-                // Prepare for next sequence
-                this.sequenceIndex++;
-                // Perform
-                this.performAction(stepData, action);
-            }
+            let action = this.tutorialData[this.actionIndex];
+            // Prepare for next sequence
+            this.actionIndex++;
+            // Perform
+            this.performAction(action);
         }
     }
 
-    private performAction(stepData: IStepData, action: IAction) {
+    private performAction(action: IAction) {
         switch(action.type) {
             case "speak":
                 this.state = TutorialState.SPEAKING;
-                this.speakTbot(stepData, action);
+                this.speakTbot(action);
                 break;
             case "transition":
-                let data = action.data;
-                this.minitb.setX(data.position.x).setY(data.position.y);
-                this.minitb.setAngle(data.angle || 0);
+                this.state = TutorialState.ANIMATING;
+                this.transitionTbot(action);
+                break;
+            case "highlight":
+                this.state = TutorialState.ANIMATING;
+                this.highlight(action);
+                break;
+            case "recipe":
+                this.recipeThingy.nextRecipe();
+                break;
+            case "dropmask":
                 this.tweens.add({
-                    targets: [this.minitb],
-                    duration: 500,
-                    x: data.xTo,
-                    y: data.yTo,
+                    targets: [this.modal],
+                    duration: 350,
+                    alpha: 0,
                     onComplete: () => {
                         this.nextTbotAction();
                     }
                 })
                 break;
+            case "enablerecipe":
+                this.recipeThingy.getNextIngredient();
+                break;
+            case "input":
+                this.state = TutorialState.WAITING;
+                this.binaryInput.clearInputs();
+                this.powerText.setText('0');
+                break;
         }
     }
 
-    private speakTbot(stepData: IStepData, action: IAction) {
+    private speakTbot(action: IAction) {
+        let waitMaybe = action.data.waitforspace;
+        if (typeof waitMaybe == 'undefined') {
+            waitMaybe = true;
+        }
+        this.speechBox.setWaitForSpace(waitMaybe);
         this.speechBox.move(action.data.position.x, action.data.position.y);
         this.speechBox.speak(action.data.text);
+    }
+
+    private transitionTbot(action: IAction) {
+        this.speechBox.shutup();
+        let data = action.data;
+        this.minitb.setX(data.position.x).setY(data.position.y);
+        this.minitb.setAngle(data.angle || 0);
+        this.tweens.add({
+            targets: [this.minitb],
+            duration: 500,
+            x: data.xTo,
+            y: data.yTo,
+            onComplete: () => {
+                this.nextTbotAction();
+            }
+        })
+    }
+
+    private highlight(action: IAction) {
+        if(action.data.behavoir == 'show') {
+            this[action.data.target].setDepth(200);
+        } else {
+            this[action.data.target].setDepth(0);
+        }
+        this.nextTbotAction();
     }
 }
