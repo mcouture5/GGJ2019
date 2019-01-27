@@ -241,8 +241,23 @@
             },
             {
                 "type": "audio",
-                "key": "error",
-                "url": "assets/sounds/error.mp3"
+                "key": "most-refreshing",
+                "url": "assets/sounds/most-refreshing.mp3"
+            },
+            {
+                "type": "audio",
+                "key": "delicious",
+                "url": "assets/sounds/delicious.mp3"
+            },
+            {
+                "type": "audio",
+                "key": "delightful",
+                "url": "assets/sounds/delightful.mp3"
+            },
+            {
+                "type": "audio",
+                "key": "too-cold",
+                "url": "assets/sounds/too-cold.mp3"
             }
         ]
     }

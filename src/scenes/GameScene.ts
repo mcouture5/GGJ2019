@@ -28,7 +28,7 @@ export class GameScene extends Phaser.Scene {
     // music and SFX
     private music: Phaser.Sound.BaseSound;
     private correctSound: Phaser.Sound.BaseSound;
-    private errorSound: Phaser.Sound.BaseSound;
+    private tooColdSound: Phaser.Sound.BaseSound;
 
     // objects
     private binaryInput: BinaryInputThingy;
@@ -163,7 +163,7 @@ export class GameScene extends Phaser.Scene {
         this.music = this.sound.add('pentatonic-jam-loop', {loop: true, volume: 0});
         this.music.play();
         this.correctSound = this.sound.add('correct');
-        this.errorSound = this.sound.add('error');
+        this.tooColdSound = this.sound.add('too-cold');
     }
 
     update(): void {
@@ -280,7 +280,7 @@ export class GameScene extends Phaser.Scene {
      * Fail to complete the recipe in time.
      */
     private failRecipe() {
-        this.errorSound.play();
+        this.tooColdSound.play();
 
         this.state = GameState.STARTING_LEVEL;
         // Immediately stop the timer
