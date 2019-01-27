@@ -51,6 +51,7 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
     private currentIngredientObject: Ingredient;
     private currentIngredientMeta: IIngredient;
     private card: Phaser.GameObjects.Sprite;
+    private recipeNameText: Phaser.GameObjects.Text;
 
     // Dont trust phaser, keep array order
     private ingredientsInOrder: Ingredient[];
@@ -78,6 +79,15 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
 
         // Create and add the card
         this.card = this.scene.add.sprite(CARD_POSITION.inactive.x, CARD_POSITION.inactive.y, 'recipecard');
+
+        // set up recipe name text
+        this.recipeNameText = this.scene.add.text(CARD_POSITION.active.x - 180, CARD_POSITION.active.y - 80, '', {
+            fontFamily: 'Digital',
+            fontSize: 32,
+            color: '#000000',
+            align: 'center'
+        })
+            .setAlpha(0);
 
         // set up SFX
         this.plopSound = this.scene.sound.add('plop', {volume: 0.75});
@@ -185,6 +195,9 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
             y: CARD_POSITION.inactive.y,
             duration: 200
         });
+
+        // hide the recipe name text
+        this.recipeNameText.setAlpha(0);
     }
 
     private showRecipe() {
@@ -220,6 +233,9 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
             duration: 1300,
             ease: 'Bounce.easeOut',
             onComplete: () => {
+                // show recipe name text
+                this.recipeNameText.setText(this.currentRecipe.name).setAlpha(1);
+
                 if (!this.tutorial) {
                     this.getNextIngredient();
                 } else {
