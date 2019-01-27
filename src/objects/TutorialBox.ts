@@ -21,7 +21,7 @@ export class TutorialBox extends Phaser.GameObjects.Group {
         this.boxWidth = 350;
         this.boxHeight = 200;
         this.bubble = this.scene.add.rectangle(0, 0, this.boxWidth, 0, 0xffffff)
-            .setStrokeStyle(0x000000)
+            .setStrokeStyle(0x000000, 1)
             .setDepth(90)
             .setOrigin(0,0);
         this.text = this.scene.add.text(0, 0, '', {
@@ -110,13 +110,15 @@ export class TutorialBox extends Phaser.GameObjects.Group {
     }
 
     private animateSpace () {
+        this.spaceText.setAlpha(1);
+        /*
         this.spaceTween = this.scene.tweens.add({
             targets: [this.spaceText],
             alpha: 1,
             loop: -1,
             yoyo: true,
             duration: 1550
-        });
+        });*/
     }
 
     

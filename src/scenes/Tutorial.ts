@@ -280,6 +280,17 @@ export class Tutorial extends Phaser.Scene {
                 this.binaryInput.clearInputs();
                 this.powerText.setText('0');
                 break;
+            case "temperature":
+                this.state = TutorialState.ANIMATING;
+                this.tweens.add({
+                    targets: [this.thermometerBar],
+                    duration: 700,
+                    height: "-=100",
+                    onComplete: () => {
+                        this.nextTbotAction();
+                    }
+                });
+                break;
         }
     }
 
