@@ -27,7 +27,11 @@ export class GameScene extends Phaser.Scene {
 
     // music and SFX
     private music: Phaser.Sound.BaseSound;
+    private matchSoundIndex: number;
     private correctSound: Phaser.Sound.BaseSound;
+    private mostRefreshingSound: Phaser.Sound.BaseSound;
+    private deliciousSound: Phaser.Sound.BaseSound;
+    private delightfulSound: Phaser.Sound.BaseSound;
     private tooColdSound: Phaser.Sound.BaseSound;
 
     // objects
@@ -162,8 +166,12 @@ export class GameScene extends Phaser.Scene {
         // set up music and SFX
         this.music = this.sound.add('pentatonic-jam-loop', {loop: true, volume: 0});
         this.music.play();
-        this.correctSound = this.sound.add('correct', {volume: 0.75});
-        this.tooColdSound = this.sound.add('too-cold');
+        this.matchSoundIndex = Phaser.Math.Between(0, 3);
+        this.correctSound = this.sound.add('correct', {volume: 0.6});
+        this.mostRefreshingSound = this.sound.add('most-refreshing', {volume: 0.5});
+        this.deliciousSound = this.sound.add('delicious', {volume: 0.5});
+        this.delightfulSound = this.sound.add('delightful', {volume: 0.5});
+        this.tooColdSound = this.sound.add('too-cold', {volume: 0.5});
     }
 
     update(): void {
@@ -225,7 +233,24 @@ export class GameScene extends Phaser.Scene {
     private checkInput(value: number) {
         this.powerText.setText(''+value);
         if (value == this.currentIngredient.value) {
-            this.correctSound.play();
+            this.matchSoundIndex++;
+            if (this.matchSoundIndex > 3) {
+                this.matchSoundIndex = 0;
+            }
+            switch (this.matchSoundIndex) {
+                case 0:
+                    this.correctSound.play();
+                    break;
+                case 1:
+                    this.mostRefreshingSound.play();
+                    break;
+                case 2:
+                    this.deliciousSound.play();
+                    break;
+                case 3:
+                    this.delightfulSound.play();
+                    break;
+            }
 
             // Pause the timer, shouldnt be penalized for something you cant do...
             if (this.waterTimer) {
