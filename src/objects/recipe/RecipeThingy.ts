@@ -312,6 +312,7 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
 
     setDepth (value: number, step: number): Phaser.GameObjects.Group {
         this.card.setDepth(value);
+        this.recipeNameText.setDepth(value);
         this.ingredientsInOrder.forEach((child) => child.setDepth(value+10));
         return super.setDepth(value, step);
     }
