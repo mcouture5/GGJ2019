@@ -73,6 +73,11 @@
                 "type": "audio",
                 "key": "pentatonic-jam-loop",
                 "url": "assets/sounds/pentatonic-jam-loop.mp3"
+            },
+            {
+                "type": "audio",
+                "key": "click",
+                "url": "assets/sounds/click.mp3"
             }
         ]
     }

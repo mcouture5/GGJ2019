@@ -35,6 +35,9 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
     private upKey: Phaser.Input.Keyboard.Key;
     private downKey: Phaser.Input.Keyboard.Key;
 
+    // click SFX
+    private click: Phaser.Sound.BaseSound;
+
     constructor(params: {scene: Phaser.Scene, x: number, y: number}) {
         super(params.scene);
 
@@ -97,6 +100,9 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
         this.upKey = this.scene.input.keyboard.addKey(
             Phaser.Input.Keyboard.KeyCodes.UP
         );
+
+        // set up click SFX
+        this.click = this.scene.sound.add('click');
     }
 
     public update() {
@@ -155,6 +161,12 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
     }
 
     private updatePointedToBox(oneZero: number) {
+        let originalOneZero: number = this.oneZeroInputs[this.boxNum];
+        let changed: boolean = oneZero !== originalOneZero;
+        if (changed) {
+            this.click.play();
+        }
+
         this.oneZeroInputs[this.boxNum] = oneZero;
         this.boxes[this.boxNum].setOneZero(oneZero);
         this.placeholders[this.boxNum].setOneZero(oneZero);
