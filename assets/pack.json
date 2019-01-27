@@ -233,6 +233,16 @@
                 "type": "image",
                 "key": "ing-31",
                 "url": "assets/images/ingredients/31.png"
+            },
+            {
+                "type": "audio",
+                "key": "correct",
+                "url": "assets/sounds/correct.mp3"
+            },
+            {
+                "type": "audio",
+                "key": "error",
+                "url": "assets/sounds/error.mp3"
             }
         ]
     }

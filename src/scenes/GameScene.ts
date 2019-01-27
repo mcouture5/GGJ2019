@@ -25,8 +25,10 @@ export class GameScene extends Phaser.Scene {
     private static readonly TBOT_HAPPY: number = 1;
     private static readonly TBOT_SAD: number = 2;
 
-    // music
+    // music and SFX
     private music: Phaser.Sound.BaseSound;
+    private correctSound: Phaser.Sound.BaseSound;
+    private errorSound: Phaser.Sound.BaseSound;
 
     // objects
     private binaryInput: BinaryInputThingy;
@@ -157,9 +159,11 @@ export class GameScene extends Phaser.Scene {
 
         // Get the first recipe
 
-        // start music
+        // set up music and SFX
         this.music = this.sound.add('pentatonic-jam-loop', {loop: true, volume: 0});
         this.music.play();
+        this.correctSound = this.sound.add('correct');
+        this.errorSound = this.sound.add('error');
     }
 
     update(): void {
@@ -221,6 +225,8 @@ export class GameScene extends Phaser.Scene {
     private checkInput(value: number) {
         this.powerText.setText(''+value);
         if (value == this.currentIngredient.value) {
+            this.correctSound.play();
+
             // Pause the timer, shouldnt be penalized for something you cant do...
             if (this.waterTimer) {
                 this.waterTimer.paused = true;
@@ -274,6 +280,8 @@ export class GameScene extends Phaser.Scene {
      * Fail to complete the recipe in time.
      */
     private failRecipe() {
+        this.errorSound.play();
+
         this.state = GameState.STARTING_LEVEL;
         // Immediately stop the timer
         this.waterTime = 0;
