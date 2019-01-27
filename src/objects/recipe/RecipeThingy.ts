@@ -112,11 +112,23 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
         this.scene.events.emit(RecipeThingy.ANIMATE);
 
         // Add dropping anim
+        let point1 = new Phaser.Math.Vector2(this.currentIngredientObject.x, this.currentIngredientObject.y);
+        let point2 = new Phaser.Math.Vector2(this.currentIngredientObject.x + 250, this.currentIngredientObject.y);
+        let point3 = new Phaser.Math.Vector2(TEACUP_POS.active.x + 100, TEACUP_POS.active.y + 100);
+        let bezier = new Phaser.Curves.QuadraticBezier(point1, point2, point3);
+        let bezierTweenState = {
+            value: 0
+        };
         this.scene.tweens.add({
-            targets: [this.currentIngredientObject],
-            x: TEACUP_POS.active.x + 100,
-            y: TEACUP_POS.active.y + 100,
+            targets: [bezierTweenState],
+            value: 1,
             duration: 1000,
+            onUpdate: () => {
+                // follow bezier curve
+                let position: Phaser.Math.Vector2 = bezier.getPoint(bezierTweenState.value);
+                this.currentIngredientObject.x = position.x;
+                this.currentIngredientObject.y = position.y;
+            },
             onComplete: () => {
                 // play hiss for water, plop for everything else
                 if (this.currentIngredientMeta.name === 'Water') {
