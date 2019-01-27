@@ -64,7 +64,7 @@ export class MainMenu extends Phaser.Scene {
     update() {
         if (!this.fading && Phaser.Input.Keyboard.JustDown(this.startKey)) {
             // 2000
-            let fadeOutDuration: number = 10;
+            let fadeOutDuration: number = 100;
             this.cameras.main.fadeOut(fadeOutDuration, 255, 255, 255);
             this.scene.scene.tweens.add({
                 targets: this.music,

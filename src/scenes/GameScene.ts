@@ -162,7 +162,7 @@ export class GameScene extends Phaser.Scene {
         // Very first update, begin a fade in (camera & music)
         if (this.fading) {
             // 1300
-            let fadeInDuration: number = 10;
+            let fadeInDuration: number = 100;
             this.cameras.main.fadeIn(fadeInDuration, 255, 255, 255, (cam, progress) => {
                 if (progress == 1) {
                     this.state = GameState.GETTING_RECIPE;
