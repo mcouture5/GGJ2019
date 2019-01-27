@@ -63,6 +63,16 @@
                 "type": "image",
                 "key": "up",
                 "url": "assets/images/up.png"
+            },
+            {
+                "type": "audio",
+                "key": "beep-boop-loop",
+                "url": "assets/sounds/beep-boop-loop.mp3"
+            },
+            {
+                "type": "audio",
+                "key": "pentatonic-jam-loop",
+                "url": "assets/sounds/pentatonic-jam-loop.mp3"
             }
         ]
     }
