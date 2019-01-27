@@ -51,7 +51,7 @@ export class MainMenu extends Phaser.Scene {
         );
 
         // start playing music
-        this.music = this.sound.add('beep-boop-loop', {loop: true});
+        this.music = this.sound.add('beep-boop-loop', {loop: true, volume: 1});
         this.music.play();
 
         // Listen for then the camera is done fading
@@ -67,10 +67,11 @@ export class MainMenu extends Phaser.Scene {
             let fadeOutDuration: number = 100;
             this.cameras.main.fadeOut(fadeOutDuration, 255, 255, 255);
             this.scene.scene.tweens.add({
-                targets: this.music,
-                key: 'volume',
-                start: 1,
-                end: 0,
+                targets: [this.music],
+                volume: {
+                    getStart: () => 1,
+                    getEnd: () => 0
+                },
                 duration: fadeOutDuration,
                 ease: 'Linear'
             });

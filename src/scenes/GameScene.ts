@@ -156,6 +156,10 @@ export class GameScene extends Phaser.Scene {
         });
 
         // Get the first recipe
+
+        // start music
+        this.music = this.sound.add('pentatonic-jam-loop', {loop: true, volume: 0});
+        this.music.play();
     }
 
     update(): void {
@@ -169,13 +173,12 @@ export class GameScene extends Phaser.Scene {
                     this.recipeThingy.nextRecipe();
                 }
             });
-            this.music = this.sound.add('pentatonic-jam-loop', {loop: true, volume: 0});
-            this.music.play();
             this.scene.scene.tweens.add({
-                targets: this.music,
-                key: 'volume',
-                start: 0,
-                end: 1,
+                targets: [this.music],
+                volume: {
+                    getStart: () => 0,
+                    getEnd: () => 1
+                },
                 duration: fadeInDuration,
                 ease: 'Linear'
             });
