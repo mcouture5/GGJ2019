@@ -11,31 +11,44 @@ export class TutorialBox extends Phaser.GameObjects.Group {
     private spaceTween: Phaser.Tweens.Tween;
     private speaking: boolean;
     private waitForSpace: boolean;
+    private murmurSoundCount: number;
+    private murmurSound: Phaser.Sound.BaseSound;
+    private minitb: Phaser.GameObjects.Sprite;
 
-    constructor(params: {scene: Phaser.Scene}) {
+    constructor(params: {scene: Phaser.Scene, minitb: Phaser.GameObjects.Sprite}) {
         super(params.scene);
+        this.minitb = params.minitb;
         this.boxWidth = 350;
         this.boxHeight = 200;
         this.bubble = this.scene.add.rectangle(0, 0, this.boxWidth, 0, 0xffffff)
-            .setStrokeStyle(0x000000)
-            .setDepth(90)
+            .setStrokeStyle(0x000000, 1)
+            .setDepth(300)
             .setOrigin(0,0);
         this.text = this.scene.add.text(0, 0, '', {
             fontFamily: 'Digital',
             fontSize: 22,
             color: '#000000',
             wordWrap: { width: this.boxWidth - 10, useAdvancedWrap: true }
-        }).setDepth(95).setAlpha(0);
+        }).setDepth(310).setAlpha(0);
         this.spaceText = this.scene.add.text(0, 0, '(PRESS SPACE)', {
             fontFamily: 'Digital',
             fontSize: 12,
             color: '#000000'
-        }).setDepth(95).setAlpha(0);
+        }).setDepth(310).setAlpha(0);
         this.space = this.scene.input.keyboard.addKey(
             Phaser.Input.Keyboard.KeyCodes.SPACE
         );
+        this.scene.anims.create({
+            key: 'talk',
+            frames: [ { key: 'minitb', frame: 0 }, { key: 'minitb', frame: 1 } ],
+            frameRate: 7,
+            repeat: -1
+        });
         this.space.isDown = false;
         this.waitForSpace = true;
+
+        this.murmurSoundCount = 0;
+        this.murmurSound = this.scene.sound.add("murmur", {volume: 0.25});
     }
 
     update() {
@@ -45,9 +58,11 @@ export class TutorialBox extends Phaser.GameObjects.Group {
             if (currentlyPrinted.length < this.speech.length) {
                 this.timer && this.timer.destroy();
                 this.text.setText(this.speech);
+                this.minitb.anims.stop();
             } else {
                 this.scene.events.emit('advance');
                 this.speaking = false;
+                this.minitb.anims.stop();
             }
         }
     }
@@ -70,13 +85,13 @@ export class TutorialBox extends Phaser.GameObjects.Group {
                 if (this.waitForSpace) {
                     this.animateSpace();
                 }
+                this.murmurSoundCount = 0;
                 this.printText();
             }
         });
     }
 
     shutup() {
-        console.log('shutup');
         this.spaceTween && this.spaceTween.stop();
         this.text.setAlpha(0);
         this.spaceText.setAlpha(0);
@@ -95,18 +110,27 @@ export class TutorialBox extends Phaser.GameObjects.Group {
     }
 
     private animateSpace () {
+        this.spaceText.setAlpha(1);
+        /*
         this.spaceTween = this.scene.tweens.add({
             targets: [this.spaceText],
             alpha: 1,
             loop: -1,
             yoyo: true,
             duration: 1550
-        });
+        });*/
     }
 
     
     private printText() {
+        if (this.murmurSoundCount <= 0) {
+            this.murmurSoundCount = 100;
+            this.murmurSound.play();
+        }
+        this.murmurSoundCount--;
+
         this.speaking = true;
+        this.minitb.anims.play('talk', true);
         let currentlyPrinted = this.text.text;
         if (currentlyPrinted.length < this.speech.length) {
             let portion = this.speech.substr(0, this.speech.length - (this.speech.length - currentlyPrinted.length) + 1);
@@ -117,6 +141,8 @@ export class TutorialBox extends Phaser.GameObjects.Group {
                 delay: 15,
                 repeat: 0
             });
+        } else {
+            this.minitb.anims.stop();
         }
     }
 

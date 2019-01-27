@@ -274,13 +274,59 @@
             "type": "input"
         },
         {
+            "type": "temperature"
+        },
+        {
+            "type": "transition",
+            "data": {
+                "position": {
+                    "x": 500,
+                    "y": 650
+                },
+                "yTo": 450,
+                "xTo": 780,
+                "duration": 500
+            }
+        },
+        {
+            "type": "speak",
+            "data": {
+                "position": {
+                    "x": 300,
+                    "y": 300
+                },
+                "text": "Whoa! Be careful! If you take too long to put the ingredients in the cup, the water gets too cold. The tea will be ruined!."
+            }
+        },
+        {
+            "type": "speak",
+            "data": {
+                "position": {
+                    "x": 300,
+                    "y": 300
+                },
+                "text": "Don't worry about this cup, I will keep it warm with my exhaust. Don't ask how that works, just trust me."
+            }
+        },
+        {
+            "type": "transition",
+            "data": {
+                "position": {
+                    "x": 780,
+                    "y": 450
+                },
+                "yTo": 650,
+                "xTo": 500
+            }
+        },
+        {
             "type": "speak",
             "data": {
                 "position": {
                     "x": 625,
                     "y": 500
                 },
-                "text": "Well done! The next ingredient requires 3 power. Turn on the '1', and '2' switches.",
+                "text": "The next ingredient requires 3 power. Turn on the '1', and '2' switches.",
                 "waitforspace": false
             }
         },

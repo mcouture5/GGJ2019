@@ -9,7 +9,7 @@
             {
                 "type": "image",
                 "key": "mainmenu-bg",
-                "url": "assets/images/mainmenu.png"
+                "url": "assets/images/menu.png"
             },
             {
                 "type": "image",
@@ -82,6 +82,11 @@
                 "type": "image",
                 "key": "teaplease",
                 "url": "assets/images/TeaPlease.png"
+            },
+            {
+                "type": "image",
+                "key": "thermometer",
+                "url": "assets/images/thermometer.png"
             },
             {
                 "type": "audio",
@@ -287,6 +292,21 @@
                 "type": "audio",
                 "key": "hiss",
                 "url": "assets/sounds/hiss.mp3"
+            },
+            {
+                "type": "audio",
+                "key": "murmur",
+                "url": "assets/sounds/murmur.mp3"
+            },
+            {
+                "type": "audio",
+                "key": "tutorial-start",
+                "url": "assets/sounds/tutorial-start.mp3"
+            },
+            {
+                "type": "audio",
+                "key": "home-to-me-loop",
+                "url": "assets/sounds/home-to-me-loop.mp3"
             }
         ]
     }

@@ -11,7 +11,7 @@
 body {
     font-size: 10px;
     color: black;
-    background-color: #ffffff;
+    background-color: #6d5a5a;
 }
 
 .hidden {
@@ -40,4 +40,9 @@ body div.container div#game {
     display: block;
     margin-left: auto;
     margin-right:auto;
+}
+
+
+body div.container div#game canvas {
+    border: 3px solid #CCCCCC;
 }

@@ -14,6 +14,8 @@ interface IAction {
     data: any;
 }
 
+let thermometerHeight = 370;
+
 /**
  * Tutorial.
  */
@@ -38,12 +40,15 @@ export class Tutorial extends Phaser.Scene {
     private minitb: Phaser.GameObjects.Sprite;
     private speechBox: TutorialBox;
     private powerText: Phaser.GameObjects.Text;
+    private thermometerBar: Phaser.GameObjects.Shape;
 
     // TUT state
     private state: TutorialState;
     private tutorialData: IAction[];
     private actionIndex: number;
     private modal: Phaser.GameObjects.Shape;
+
+    private tutorialStartSound: Phaser.Sound.BaseSound;
 
     constructor() {
         super({
@@ -79,8 +84,8 @@ export class Tutorial extends Phaser.Scene {
         this.add.sprite(0, 0, 'table').setOrigin(0, 0);
         this.tbot = this.add.sprite(-1, 170, 'teabot', Tutorial.TBOT_OK).setOrigin(0, 0);
         this.teacups.push(
-            this.add.sprite(TEACUP_POS.active.x, TEACUP_POS.active.y, 'teacup-1').setOrigin(0, 0).setDepth(10),
-            this.add.sprite(TEACUP_POS.inactive.x, TEACUP_POS.inactive.y, 'teacup-2').setOrigin(0, 0).setDepth(10) // off screen
+            this.add.sprite(TEACUP_POS.active.x, TEACUP_POS.active.y, 'teacup-1').setOrigin(0, 0).setDepth(40),
+            this.add.sprite(TEACUP_POS.inactive.x, TEACUP_POS.inactive.y, 'teacup-2').setOrigin(0, 0).setDepth(40) // off screen
         );
         this.activeTeacupIndex = 0;
         this.steam = this.add.sprite(TEACUP_POS.active.x, 0, 'steam').setOrigin(0, 0).setAlpha(0);
@@ -113,7 +118,6 @@ export class Tutorial extends Phaser.Scene {
         this.events.addListener(RecipeThingy.GOT_RECIPE, (recipe) => {
         });
         this.events.addListener('TUT:advance', () => {
-            console.log('next');
             this.nextTbotAction();
         });
 
@@ -135,9 +139,14 @@ export class Tutorial extends Phaser.Scene {
             color: '#efaad1'
         });
 
+        // Temperature
+        this.add.sprite(960, 525, 'thermometer').setDepth(2);
+        this.add.rectangle(958, 498, 30, thermometerHeight, 0x000000);
+        this.thermometerBar = this.add.rectangle(958, 498, 30, thermometerHeight, 0xFF0000).setDepth(1).setAngle(180);
+
         // MiniTb
-        this.minitb = this.add.sprite(-200, -200, 'minitb', 0).setDepth(90);
-        this.speechBox = new TutorialBox({scene: this});
+        this.minitb = this.add.sprite(-200, -200, 'minitb', 0).setDepth(300);
+        this.speechBox = new TutorialBox({scene: this, minitb: this.minitb});
         this.events.addListener('advance', () => {
             this.nextTbotAction();
         });
@@ -158,6 +167,8 @@ export class Tutorial extends Phaser.Scene {
                 repeat: 0
             });
         });
+
+        this.tutorialStartSound = this.sound.add("tutorial-start", {volume: 0.25});
     }
 
     private checkInput(value: number) {
@@ -171,6 +182,7 @@ export class Tutorial extends Phaser.Scene {
     update() {
         if (this.fading) {
             // 2000
+            this.tutorialStartSound.play();
             let fadeOutDuration: number = 2000;
             this.cameras.main.fadeIn(fadeOutDuration, 255, 255, 255);
             this.fading = false;
@@ -265,8 +277,20 @@ export class Tutorial extends Phaser.Scene {
                 break;
             case "input":
                 this.state = TutorialState.WAITING;
+                this.teacups.forEach((teacup) => teacup.setDepth(250));
                 this.binaryInput.clearInputs();
                 this.powerText.setText('0');
+                break;
+            case "temperature":
+                this.state = TutorialState.ANIMATING;
+                this.tweens.add({
+                    targets: [this.thermometerBar],
+                    duration: 700,
+                    height: "-=100",
+                    onComplete: () => {
+                        this.nextTbotAction();
+                    }
+                });
                 break;
         }
     }

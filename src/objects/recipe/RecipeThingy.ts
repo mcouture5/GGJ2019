@@ -20,21 +20,22 @@ export interface IRecipeData {
 
 let CARD_POSITION = {
     active: {
-        x: 240,
+        x: 215,
         y: 80
     },
     inactive: {
-        x: 240,
+        x: 215,
         y: -121
     }
 }
 
 let ING_POSITION = {
-    x: 240,
+    x: 215,
     y: 13
 }
 export class RecipeThingy extends Phaser.GameObjects.Group {
     public static readonly GETTING_RECIPE: string = 'Recipe:gettingRecipe';
+    public static readonly OUT_OF_RECIPES: string = 'Recipe:outOfRecipes';
     public static readonly READY: string = 'Recipe:ready';
     public static readonly ADDED: string = 'Recipe:added';
     public static readonly COMPLETE: string = 'Recipe:complete';
@@ -92,6 +93,13 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
         this.currentIngredientObject = null;
         // Pull the next recipe from the data
         this.currentRecipe = this.recipes.shift();
+
+        // if we're out of recipes, change game state and return early
+        if (!this.currentRecipe) {
+            this.scene.events.emit(RecipeThingy.OUT_OF_RECIPES);
+            return;
+        }
+
         // Every recipe will have water as the first item
         this.currentRecipe.ingredients.unshift(0);
         // Calculate the total needed
@@ -112,11 +120,23 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
         this.scene.events.emit(RecipeThingy.ANIMATE);
 
         // Add dropping anim
+        let point1 = new Phaser.Math.Vector2(this.currentIngredientObject.x, this.currentIngredientObject.y);
+        let point2 = new Phaser.Math.Vector2(this.currentIngredientObject.x + 250, this.currentIngredientObject.y);
+        let point3 = new Phaser.Math.Vector2(TEACUP_POS.active.x + 100, TEACUP_POS.active.y + 100);
+        let bezier = new Phaser.Curves.QuadraticBezier(point1, point2, point3);
+        let bezierTweenState = {
+            value: 0
+        };
         this.scene.tweens.add({
-            targets: [this.currentIngredientObject],
-            x: TEACUP_POS.active.x + 100,
-            y: TEACUP_POS.active.y + 100,
+            targets: [bezierTweenState],
+            value: 1,
             duration: 1000,
+            onUpdate: () => {
+                // follow bezier curve
+                let position: Phaser.Math.Vector2 = bezier.getPoint(bezierTweenState.value);
+                this.currentIngredientObject.x = position.x;
+                this.currentIngredientObject.y = position.y;
+            },
             onComplete: () => {
                 // play hiss for water, plop for everything else
                 if (this.currentIngredientMeta.name === 'Water') {
