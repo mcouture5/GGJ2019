@@ -29,7 +29,7 @@ export class MainMenu extends Phaser.Scene {
 
     create() {
         this.bg = this.add.sprite(400, 300, 'mainmenu-bg');
-        this.cameras.main.setBackgroundColor(0xfff);
+        this.cameras.main.setBackgroundColor(0xffffff);
 
         this.texts.push(
             this.add.text(290,180,
@@ -54,17 +54,17 @@ export class MainMenu extends Phaser.Scene {
         this.music = this.sound.add('beep-boop-loop', {loop: true, volume: 1});
         this.music.play();
 
-        // Listen for then the camera is done fading
+        // Listen for when the camera is done fading
         this.cameras.main.once('camerafadeoutcomplete', (camera) => {
             this.music.stop();
-            this.scene.start('GameScene');
+            this.scene.start('Tutorial');
         });
     }
 
     update() {
         if (!this.fading && Phaser.Input.Keyboard.JustDown(this.startKey)) {
             // 2000
-            let fadeOutDuration: number = 100;
+            let fadeOutDuration: number = 2000;
             this.cameras.main.fadeOut(fadeOutDuration, 255, 255, 255);
             this.scene.scene.tweens.add({
                 targets: [this.music],

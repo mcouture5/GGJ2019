@@ -1,0 +1,115 @@
+
+export class TutorialBox extends Phaser.GameObjects.Group {
+    private bubble: Phaser.GameObjects.Shape;
+    private text: Phaser.GameObjects.Text;
+    private spaceText: Phaser.GameObjects.Text;
+    private speech: string;
+    private boxWidth: number;
+    private boxHeight: number;
+    private space: Phaser.Input.Keyboard.Key;
+    private timer: Phaser.Time.TimerEvent;
+    private spaceTween: Phaser.Tweens.Tween;
+    private speaking: boolean;
+
+    constructor(params: {scene: Phaser.Scene}) {
+        super(params.scene);
+        this.boxWidth = 350;
+        this.boxHeight = 200;
+        this.bubble = this.scene.add.rectangle(0, 0, this.boxWidth, 0, 0xffffff)
+            .setStrokeStyle(0x000000)
+            .setDepth(90)
+            .setOrigin(0,0);
+        this.text = this.scene.add.text(0, 0, '', {
+            fontFamily: 'Digital',
+            fontSize: 22,
+            color: '#000000',
+            wordWrap: { width: this.boxWidth - 10, useAdvancedWrap: true }
+        }).setDepth(95).setAlpha(0);
+        this.spaceText = this.scene.add.text(0, 0, '(PRESS SPACE)', {
+            fontFamily: 'Digital',
+            fontSize: 12,
+            color: '#000000'
+        }).setDepth(95).setAlpha(0);
+        this.space = this.scene.input.keyboard.addKey(
+            Phaser.Input.Keyboard.KeyCodes.SPACE
+        );
+        this.space.isDown = false;
+    }
+
+    update() {
+        if (this.speaking && Phaser.Input.Keyboard.JustUp(this.space)) {
+            // If still talking, just finish talking
+            let currentlyPrinted = this.text.text;
+            if (currentlyPrinted.length < this.speech.length) {
+                this.timer && this.timer.destroy();
+                this.text.setText(this.speech);
+            } else {
+                this.scene.events.emit('advance');
+                this.speaking = false;
+            }
+        }
+    }
+
+    move(x: number, y: number) {
+        this.bubble.setX(x).setY(y);
+        this.text.setX(x + 10).setY(y + 10).setText('');
+        this.spaceText.setX(x + this.boxWidth - 75).setY(y + this.boxHeight - 15);
+    }
+
+    speak(speech: string) {
+        this.speech = speech;
+        this.bubble.setAlpha(1);
+        this.scene.tweens.add({
+            targets: [this.bubble],
+            height: this.boxHeight,
+            duration: 550,
+            onComplete: () => {
+                this.text.setText('').setAlpha(1).setSize(200, 200);
+                this.animateSpace();
+                this.printText();
+            }
+        });
+    }
+
+    shutup() {
+        console.log('shutup');
+        this.spaceTween && this.spaceTween.stop();
+        this.text.setAlpha(0);
+        this.spaceText.setAlpha(0);
+        this.scene.tweens.add({
+            targets: [this.bubble],
+            height: 0,
+            duration: 200,
+            onComplete: () => {
+                this.bubble.setAlpha(0);
+            }
+        });
+    }
+
+    private animateSpace () {
+        this.spaceTween = this.scene.tweens.add({
+            targets: [this.spaceText],
+            alpha: 1,
+            loop: -1,
+            yoyo: true,
+            duration: 1550
+        });
+    }
+
+    
+    private printText() {
+        this.speaking = true;
+        let currentlyPrinted = this.text.text;
+        if (currentlyPrinted.length < this.speech.length) {
+            let portion = this.speech.substr(0, this.speech.length - (this.speech.length - currentlyPrinted.length) + 1);
+            this.text.setText(portion);
+            this.timer = this.scene.time.addEvent({
+                callback: this.printText,
+                callbackScope: this,
+                delay: 20,
+                repeat: 0
+            });
+        }
+    }
+
+}

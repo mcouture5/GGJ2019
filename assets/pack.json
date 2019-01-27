@@ -50,6 +50,15 @@
                 }
             },
             {
+                "type": "spritesheet",
+                "key": "minitb",
+                "url": "assets/images/minitb.png",
+                "frameConfig": {
+                    "frameWidth": 214,
+                    "frameHeight": 295
+                }
+            },
+            {
                 "type": "image",
                 "key": "arrow",
                 "url": "assets/images/arrow.png"
@@ -68,6 +77,11 @@
                 "type": "image",
                 "key": "star",
                 "url": "assets/images/star.png"
+            },
+            {
+                "type": "image",
+                "key": "teaplease",
+                "url": "assets/images/TeaPlease.png"
             },
             {
                 "type": "audio",

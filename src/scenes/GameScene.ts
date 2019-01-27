@@ -172,6 +172,12 @@ export class GameScene extends Phaser.Scene {
             color: '#000'
         });
 
+        // Listen for camera done fading
+        this.cameras.main.once('camerafadeincomplete', (camera) => {
+            this.state = GameState.GETTING_RECIPE;
+            this.recipeThingy.nextRecipe();
+        });
+
         // set up music and SFX
         this.music = this.sound.add('pentatonic-jam-loop', {loop: true, volume: 0});
         this.music.play();
@@ -188,12 +194,7 @@ export class GameScene extends Phaser.Scene {
         if (this.fading) {
             // 1300
             let fadeInDuration: number = 100;
-            this.cameras.main.fadeIn(fadeInDuration, 255, 255, 255, (cam, progress) => {
-                if (progress == 1) {
-                    this.state = GameState.GETTING_RECIPE;
-                    this.recipeThingy.nextRecipe();
-                }
-            });
+            this.cameras.main.fadeIn(fadeInDuration, 255, 255, 255);
             this.scene.scene.tweens.add({
                 targets: [this.music],
                 volume: {

@@ -1,38 +1,360 @@
 {
-    "tutorial": {
-        "step_0": {
-            "tbot_0": "Hi! I am TeaBot, your brand new tea making machine! I sure do love making tea!",
-            "tbot_1": "Welcome to your new home! However, I see you are feeling a bit homesick. Don't worry, that happens often when moving into a new place. Why don't you sit back and let me make you a hot cup of tea.",
-            "tbot_2": "Oh yeah, there is one thing I should mention. Unfortunately I only understand binary commands.",
-            "tbot_3": "What's that worried look on your face? Don't be afraid, I will teach you!",
-            "tbot_4": "Just follow my lead, and we will be making tea in no time!"
+    "tutorial": [
+        {
+            "sequence": [
+                {
+                    "type": "transition",
+                    "data": {
+                        "position": {
+                            "x": 900,
+                            "y": 900
+                        },
+                        "yTo": 650,
+                        "xTo": 900
+                    }
+                }
+            ]
         },
-        "step_1": {
-            "tbot_0": "This is where I get all of my commands. I call these 'switches'.",
-            "tbot_1": "Each switch has a value associated to it. The right most switch is 1.",
-            "tbot_2": "The next is 2.",
-            "tbot_3": "After that, 4, and so on!",
-            "tbot_4": "Notice a pattern? That's right, each position is a power of 2! Oh, you didn't notice that? That's okay, it doesn't really make sense to me either. Who knows this stuff?",
-            "tbot_5": "Anyway, your job is to tell me which switch to turn on. Sounds simple right? Well it is, but there is a catch.",
-            "tbot_6": "As you turn on a switch, my 'TEA MASTER' power increases by that switch's value. The more swicthes on, the higher my power.",
-            "tbot_7": "If my power is too great for a long period of time, bad things happen man. Lets not do that okay? Thanks.","tbot_8": "Okay, now let me show you my selection of teas."
+        {
+            "sequence": [
+                {
+                    "type": "speak",
+                    "data": {
+                        "position": {
+                            "x": 425,
+                            "y": 500
+                        },
+                        "text": "Hi! I am TeaBot, your brand new tea making machine! I sure do love making tea!"
+                    }
+                },
+                {
+                    "type": "speak",
+                    "data": {
+                        "position": {
+                            "x": 425,
+                            "y": 500
+                        },
+                        "text": "Welcome to your new home! However, I see you are feeling a bit homesick. Don't worry, that happens often when moving into a new place. Why don't you sit back and let me make you a hot cup of tea."
+                    }
+                },
+                {
+                    "type": "speak",
+                    "data": {
+                        "position": {
+                            "x": 425,
+                            "y": 500
+                        },
+                        "text": "Oh yeah, there is one thing I should mention. Unfortunately I only understand binary commands."
+                    }
+                },
+                {
+                    "type": "speak",
+                    "data": {
+                        "position": {
+                            "x": 425,
+                            "y": 500
+                        },
+                        "text": "What's that worried look on your face? Don't be afraid, I will teach you! Just follow my lead, and we will be making tea in no time!"
+                    }
+                }
+            ]
         },
-        "step_2": {
-            "tbot_0": "I have chosen a group of tea recipies I think you will enjoy. You can see what ingredients are needed for each recipie here.",
-            "tbot_1": "Each ingredient has a value which must be met in order for me to grab it from the pantry. My TEA MASTER power is used to place each ingredient into the cup.",
-            "tbot_2": "Why don't we give it a run! I will help you through the first one."
+        {
+            "sequence": [
+                {
+                    "type": "transition",
+                    "data": {
+                        "position": {
+                            "x": 900,
+                            "y": 650
+                        },
+                        "yTo": 900,
+                        "xTo": 900
+                    }
+                },
+                {
+                    "type": "transition",
+                    "data": {
+                        "position": {
+                            "x": 500,
+                            "y": 900
+                        },
+                        "yTo": 650,
+                        "xTo": 500
+                    }
+                }
+            ]
         },
-        "step_3": {
-            "tbot_0": "The first ingredient requires 4 power. Turn on the '4' switch!",
-            "tbot_1": "Well done! The next ingredient requires 3 power. Turn on the '1', and '2' switches.",
-            "tbot_2": "Amazing! Now for the final ingredient. This one requires 7 power.",
-            "tbot_3": "Success! What a great brew!"
+        {
+            "sequence": [
+                {
+                    "type": "speak",
+                    "data": {
+                        "position": {
+                            "x": 625,
+                            "y": 500
+                        },
+                        "text": "This is where I get all of my commands. I call these 'switches'."
+                    }
+                },
+                {
+                    "type": "speak",
+                    "data": {
+                        "position": {
+                            "x": 625,
+                            "y": 500
+                        },
+                        "text": "Each switch has a value associated to it. The right most switch is 1."
+                    }
+                },
+                {
+                    "type": "speak",
+                    "data": {
+                        "position": {
+                            "x": 625,
+                            "y": 500
+                        },
+                        "text": "The next is 2."
+                    }
+                },
+                {
+                    "type": "speak",
+                    "data": {
+                        "position": {
+                            "x": 625,
+                            "y": 500
+                        },
+                        "text": "After that, 4, and so on!"
+                    }
+                },
+                {
+                    "type": "speak",
+                    "data": {
+                        "position": {
+                            "x": 625,
+                            "y": 500
+                        },
+                        "text": "Notice a pattern? That's right, each position is a power of 2! Oh, you didn't notice that? That's okay, it doesn't really make sense to me either. Who knows this stuff?"
+                    }
+                },
+                {
+                    "type": "speak",
+                    "data": {
+                        "position": {
+                            "x": 625,
+                            "y": 500
+                        },
+                        "text": "Anyway, your job is to tell me which switch to turn on. Sounds simple right? Well it is, but there is a catch."
+                    }
+                },
+                {
+                    "type": "speak",
+                    "data": {
+                        "position": {
+                            "x": 625,
+                            "y": 500
+                        },
+                        "text": "As you turn on a switch, my tea power increases by that switch's value. The more switches on, the higher my power."
+                    }
+                },
+                {
+                    "type": "speak",
+                    "data": {
+                        "position": {
+                            "x": 625,
+                            "y": 500
+                        },
+                        "text": "Okay, now let me show you my selection of teas."
+                    }
+                }
+            ]
         },
-        "step_4": {
-            "tbot_0": "Looks like you got the hang of it. Oh, you are thirsty again? Geesh. Well, time to get to work!"
+        {
+            "sequence": [
+                {
+                    "type": "transition",
+                    "data": {
+                        "position": {
+                            "x": 500,
+                            "y": 650
+                        },
+                        "yTo": 900,
+                        "xTo": 500
+                    }
+                },
+                {
+                    "type": "transition",
+                    "data": {
+                        "position": {
+                            "x": 500,
+                            "y": -300
+                        },
+                        "yTo": 125,
+                        "xTo": 500,
+                        "angle": 180
+                    }
+                }
+            ]
         },
-        "error": {
-            "tbot_0": "Whoops, too much power! Turn off some switches until we reach the right amount."
+        {
+            "sequence": [
+                {
+                    "type": "speak",
+                    "data": {
+                        "position": {
+                            "x": 635,
+                            "y": 200
+                        },
+                        "text": "I have chosen a group of tea recipies I think you will enjoy. You can see what ingredients are needed for each recipe here."
+                    }
+                },
+                {
+                    "type": "speak",
+                    "data": {
+                        "position": {
+                            "x": 635,
+                            "y": 200
+                        },
+                        "text": "Each ingredient has a value which must be met in order for me to grab it from the pantry. My TEA MASTER power is used to place each ingredient into the cup."
+                    }
+                },
+                {
+                    "type": "speak",
+                    "data": {
+                        "position": {
+                            "x": 635,
+                            "y": 200
+                        },
+                        "text": "Why don't we give it a run! I will help you through the first one."
+                    }
+                }
+            ]
+        },
+        {
+            "sequence": [
+                {
+                    "type": "transition",
+                    "data": {
+                        "position": {
+                            "x": 500,
+                            "y": 125
+                        },
+                        "yTo": -300,
+                        "xTo": 500,
+                        "angle": 180
+                    }
+                },
+                {
+                    "type": "transition",
+                    "data": {
+                        "position": {
+                            "x": 500,
+                            "y": 900
+                        },
+                        "yTo": 650,
+                        "xTo": 500
+                    }
+                }
+            ]
+        },
+        {
+            "sequence": [
+                {
+                    "type": "speak",
+                    "data": {
+                        "position": {
+                            "x": 625,
+                            "y": 500
+                        },
+                        "text": "The first ingredient requires 4 power. Turn on the '4' switch!"
+                    }
+                },
+                {
+                    "type": "speak",
+                    "data": {
+                        "position": {
+                            "x": 625,
+                            "y": 500
+                        },
+                        "text": "Well done! The next ingredient requires 3 power. Turn on the '1', and '2' switches."
+                    }
+                },
+                {
+                    "type": "speak",
+                    "data": {
+                        "position": {
+                            "x": 625,
+                            "y": 500
+                        },
+                        "text": "Amazing! Now for the final ingredient. This one requires 7 power."
+                    }
+                },
+                {
+                    "type": "speak",
+                    "data": {
+                        "position": {
+                            "x": 625,
+                            "y": 500
+                        },
+                        "text": "Success! What a great brew!"
+                    }
+                }
+            ]
+        },
+        {
+            "sequence": [
+                {
+                    "type": "transition",
+                    "data": {
+                        "position": {
+                            "x": 500,
+                            "y": 650
+                        },
+                        "yTo": 900,
+                        "xTo": 500
+                    }
+                },
+                {
+                    "type": "transition",
+                    "data": {
+                        "position": {
+                            "x": 500,
+                            "y": 900
+                        },
+                        "yTo": 650,
+                        "xTo": 500
+                    }
+                }
+            ]
+        },
+        {
+            "sequence": [
+                {
+                    "type": "speak",
+                    "data": {
+                        "position": {
+                            "x": 625,
+                            "y": 500
+                        },
+                        "text": "Looks like you got the hang of it. Oh, you are thirsty again? Geesh. Well, time to get to work!"
+                    }
+                }
+            ]
+        },
+        {
+            "sequence": [
+                {
+                    "type": "transition",
+                    "data": {
+                        "position": {
+                            "x": 500,
+                            "y": 650
+                        },
+                        "yTo": 900,
+                        "xTo": 500
+                    }
+                }
+            ]
         }
-    }
+    ]
 }
