@@ -18,17 +18,21 @@ export interface IRecipeData {
     recipes: Array<IRecipe>;
 }
 
-let position = {
+let CARD_POSITION = {
     active: {
-        x: 512,
-        y: 50
+        x: 240,
+        y: 80
     },
     inactive: {
-        x: 512,
+        x: 240,
         y: -121
     }
 }
 
+let ING_POSITION = {
+    x: 240,
+    y: 13
+}
 export class RecipeThingy extends Phaser.GameObjects.Group {
     public static readonly GETTING_RECIPE: string = 'Recipe:gettingRecipe';
     public static readonly READY: string = 'Recipe:ready';
@@ -45,7 +49,7 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
     private ingredientIndex: number;
     private currentIngredientObject: Ingredient;
     private currentIngredientMeta: IIngredient;
-    private card: Phaser.GameObjects.Shape;
+    private card: Phaser.GameObjects.Sprite;
 
     // Dont trust phaser, keep array order
     private ingredientsInOrder: Ingredient[];
@@ -68,8 +72,7 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
         this.currentIngredientObject = null;
 
         // Create and add the card
-        this.card = this.scene.add.rectangle(position.inactive.x, position.inactive.y, 300, 120, 0xffffff)
-            .setStrokeStyle(1, 0x000000);
+        this.card = this.scene.add.sprite(CARD_POSITION.inactive.x, CARD_POSITION.inactive.y, 'recipecard');
 
         // set up SFX
         this.plopSound = this.scene.sound.add('plop', {volume: 0.75});
@@ -155,7 +158,7 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
         // Hide the recipe card
         this.scene.tweens.add({
             targets: [this.card],
-            y: position.inactive.y,
+            y: CARD_POSITION.inactive.y,
             duration: 200
         });
     }
@@ -167,13 +170,14 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
         for (let ingredient of currentIngs) {
             // Lookup the ingredient from the metadata
             let ingMeta = this.getIngredientMeta(ingredient);
+            // Draw in reverse order
             let ingSprite = new Ingredient({
                 scene: this.scene,
-                x: position.inactive.x + (count * 50) - (this.card.width / 2),
-                y: position.inactive.y,
+                x: ING_POSITION.x,
+                y: CARD_POSITION.inactive.y + ING_POSITION.y,
                 key: ingMeta.key
             });
-            ingSprite.setX(ingSprite.x + (ingSprite.width / 2));
+            ingSprite.setX(ingSprite.x + ((count*-1) * ingSprite.width) + ingSprite.width);
             this.add(ingSprite, true);
             this.ingredientsInOrder.push(ingSprite);
             count++;
@@ -181,14 +185,14 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
         // Add a tween for each ingredient
         this.scene.tweens.add({
             targets: [this.card],
-            y: position.active.y,
+            y: CARD_POSITION.active.y,
             duration: 1300,
             ease: 'Bounce',
             easeParams: [ 3.5 ]
         });
         this.scene.tweens.add({
             targets: this.getChildren(),
-            y: position.active.y,
+            y: CARD_POSITION.active.y + ING_POSITION.y,
             duration: 1300,
             ease: 'Bounce.easeOut',
             onComplete: () => {
@@ -249,7 +253,7 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
                 // Also shift the remaining ingredients
                 this.scene.tweens.add({
                     targets: this.ingredientsInOrder,
-                    x: '-=50',
+                    x: '+=150',
                     duration: 250
                 });
             }

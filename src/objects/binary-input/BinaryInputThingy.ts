@@ -48,18 +48,19 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
         // create and add placeholders and boxes (from right to left)
         this.boxes = [];
         this.placeholders = [];
-        let boxWidthOffset: number = -1.5; // goes -1.5, -0.5, 0.5, 1.5
+        let boxWidthOffset: number = -1; // goes -1.5, -0.5, 0.5, 1.5
+        let botWidthSpacing = 12;
         for (let i = BinaryInputThingy.PLACEHOLDERS.length - 1; i >= 0; i--) {
             let box = new OneZeroInputBox({scene: params.scene, x: 0, y: 0});
             let text: string = BinaryInputThingy.PLACEHOLDERS[i] + '';
             let placeholder = new OneZeroPlaceholder({scene: params.scene, x: 0, y: 0, text: text});
             let boxWidth: number = box.width;
             let boxHeight: number = box.height;
-            let boxX: number = this.x + (boxWidth * boxWidthOffset); // across center line using offset
-            let boxY: number = this.y - (boxHeight / 2); // above center line
+            let boxX: number = this.x + (boxWidth * boxWidthOffset) - (i * botWidthSpacing); // across center line using offset
+            let boxY: number = this.y; // rest at bottom of panel
             let placeholderWidth: number = placeholder.width;
             let placeholderX: number = boxX - (placeholderWidth / 2);
-            let placeholderY: number = boxY - (boxHeight) + 4;
+            let placeholderY: number = boxY - (boxHeight) - 18;
             box.setX(boxX);
             box.setY(boxY);
             placeholder.setX(placeholderX);
@@ -75,7 +76,7 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
         this.pointer = new Pointer({scene: params.scene, x: 0, y: 0});
         let pointerHeight: number = this.pointer.height;
         let x: number = this.boxes[0].x; // under box #0
-        let y: number = this.y + (pointerHeight / 2); // under center line
+        let y: number = this.y + 55; // under panel box line
         this.pointer.setX(x);
         this.pointer.setY(y);
         this.add(this.pointer, true);

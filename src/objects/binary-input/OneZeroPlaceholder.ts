@@ -6,13 +6,13 @@ export class OneZeroPlaceholder extends Phaser.GameObjects.Text {
     // the styles for one/zero
     private static readonly STYLE_ZERO: object = {
         fontFamily: 'Digital',
-        fontSize: 32,
-        color: 'black'
+        fontSize: 46,
+        color: '#6d5a5a'
     };
     private static readonly STYLE_ONE: object = {
         fontFamily: 'Digital',
-        fontSize: 32,
-        color: 'white'
+        fontSize: 46,
+        color: '#efaad1'
     };
 
     constructor(params: {scene: Phaser.Scene, x: number, y: number, text: string}) {

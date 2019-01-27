@@ -151,7 +151,7 @@ export class GameScene extends Phaser.Scene {
         this.powerText = this.add.text(115, 450, '0', {
             fontFamily: 'Digital',
             fontSize: 72,
-            color: '#000'
+            color: '#efaad1'
         });
 
         // Temperature

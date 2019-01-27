@@ -56,8 +56,18 @@
             },
             {
                 "type": "image",
-                "key": "up",
-                "url": "assets/images/up.png"
+                "key": "arrow",
+                "url": "assets/images/arrow.png"
+            },
+            {
+                "type": "image",
+                "key": "recipecard",
+                "url": "assets/images/recipecard.png"
+            },
+            {
+                "type": "image",
+                "key": "speechbubble",
+                "url": "assets/images/Speechbubble.png"
             },
             {
                 "type": "audio",

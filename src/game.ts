@@ -10,7 +10,7 @@ const config: GameConfig = {
   title: 'TeaBot',
   width: 1024,
   height: 768,
-  type: Phaser.AUTO,
+  type: Phaser.WEBGL,
   parent: 'game',
   scene: [Boot, MainMenu, GameScene],
   input: {
