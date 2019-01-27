@@ -45,6 +45,8 @@ export class Tutorial extends Phaser.Scene {
     private actionIndex: number;
     private modal: Phaser.GameObjects.Shape;
 
+    private tutorialStartSound: Phaser.Sound.BaseSound;
+
     constructor() {
         super({
             key: 'Tutorial'
@@ -158,6 +160,8 @@ export class Tutorial extends Phaser.Scene {
                 repeat: 0
             });
         });
+
+        this.tutorialStartSound = this.sound.add("tutorial-start", {volume: 0.25});
     }
 
     private checkInput(value: number) {
@@ -171,6 +175,7 @@ export class Tutorial extends Phaser.Scene {
     update() {
         if (this.fading) {
             // 2000
+            this.tutorialStartSound.play();
             let fadeOutDuration: number = 2000;
             this.cameras.main.fadeIn(fadeOutDuration, 255, 255, 255);
             this.fading = false;

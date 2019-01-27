@@ -292,6 +292,11 @@
                 "type": "audio",
                 "key": "murmur",
                 "url": "assets/sounds/murmur.mp3"
+            },
+            {
+                "type": "audio",
+                "key": "tutorial-start",
+                "url": "assets/sounds/tutorial-start.mp3"
             }
         ]
     }
