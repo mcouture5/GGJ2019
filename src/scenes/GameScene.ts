@@ -177,7 +177,7 @@ export class GameScene extends Phaser.Scene {
                 targets: [this.music],
                 volume: {
                     getStart: () => 0,
-                    getEnd: () => 1
+                    getEnd: () => 0.2
                 },
                 duration: fadeInDuration,
                 ease: 'Linear'

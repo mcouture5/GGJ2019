@@ -78,6 +78,11 @@
                 "type": "audio",
                 "key": "click",
                 "url": "assets/sounds/click.mp3"
+            },
+            {
+                "type": "audio",
+                "key": "plop",
+                "url": "assets/sounds/plop.mp3"
             }
         ]
     }
