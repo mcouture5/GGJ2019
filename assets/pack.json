@@ -302,6 +302,11 @@
                 "type": "audio",
                 "key": "tutorial-start",
                 "url": "assets/sounds/tutorial-start.mp3"
+            },
+            {
+                "type": "audio",
+                "key": "home-to-me-loop",
+                "url": "assets/sounds/home-to-me-loop.mp3"
             }
         ]
     }

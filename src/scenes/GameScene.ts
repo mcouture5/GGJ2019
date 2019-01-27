@@ -35,6 +35,7 @@ export class GameScene extends Phaser.Scene {
     private deliciousSound: Phaser.Sound.BaseSound;
     private delightfulSound: Phaser.Sound.BaseSound;
     private tooColdSound: Phaser.Sound.BaseSound;
+    private endGameMusic: Phaser.Sound.BaseSound;
 
     // objects
     private binaryInput: BinaryInputThingy;
@@ -116,6 +117,61 @@ export class GameScene extends Phaser.Scene {
             this.tbot.setFrame(GameScene.TBOT_OK);
             this.state = GameState.GETTING_RECIPE;
         });
+        this.events.addListener(RecipeThingy.OUT_OF_RECIPES, () => {
+            // YOU WON!!!
+
+            // happy tbot
+            this.tbot.setFrame(GameScene.TBOT_HAPPY);
+
+            // say "YOU WON"
+            this.speechBubble.setAlpha(1).setDepth(1);
+            let textX = 420;
+            let textY = 210;
+            let text = this.add.text(textX, textY, 'YOU WON', {
+                fontFamily: 'Digital',
+                fontSize: 45,
+                color: '#000000'
+            }).setDepth(95);
+
+            // particle effect madness
+            let teacupWidth: number = this.teacups[0].width;
+            let teacupHeight: number = this.teacups[0].height;
+            let starParticles: Phaser.GameObjects.Particles.ParticleEmitterManager = this.add.particles('star').setDepth(0);
+            let starEmitter: Phaser.GameObjects.Particles.ParticleEmitter = starParticles.createEmitter({
+                x: TEACUP_POS.active.x + (teacupWidth / 2),
+                y: TEACUP_POS.active.y + (teacupHeight / 8),
+                angle: {min: 200, max: 340},
+                speed: 500,
+                frequency: 1,
+                lifespan: 2000
+            });
+
+            // fade out regular music
+            this.scene.scene.tweens.add({
+                targets: [this.music],
+                volume: {
+                    getStart: () => 0.2,
+                    getEnd: () => 0
+                },
+                duration: 1000,
+                ease: 'Linear',
+                onComplete: () => {
+                    this.music.stop();
+
+                    // fade in end game music
+                    this.endGameMusic.play();
+                    this.scene.scene.tweens.add({
+                        targets: [this.endGameMusic],
+                        volume: {
+                            getStart: () => 0,
+                            getEnd: () => 1
+                        },
+                        duration: 1000,
+                        ease: 'Linear'
+                    });
+                }
+            });
+        });
         this.events.addListener(RecipeThingy.READY, () => {
             this.state = GameState.AWAITING_INPUT;
         });
@@ -168,6 +224,7 @@ export class GameScene extends Phaser.Scene {
         this.deliciousSound = this.sound.add('delicious', {volume: 0.5});
         this.delightfulSound = this.sound.add('delightful', {volume: 0.5});
         this.tooColdSound = this.sound.add('too-cold', {volume: 0.5});
+        this.endGameMusic = this.sound.add('home-to-me-loop', {loop: true, volume: 0});
     }
 
     update(): void {

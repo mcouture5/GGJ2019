@@ -35,6 +35,7 @@ let ING_POSITION = {
 }
 export class RecipeThingy extends Phaser.GameObjects.Group {
     public static readonly GETTING_RECIPE: string = 'Recipe:gettingRecipe';
+    public static readonly OUT_OF_RECIPES: string = 'Recipe:outOfRecipes';
     public static readonly READY: string = 'Recipe:ready';
     public static readonly ADDED: string = 'Recipe:added';
     public static readonly COMPLETE: string = 'Recipe:complete';
@@ -92,6 +93,13 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
         this.currentIngredientObject = null;
         // Pull the next recipe from the data
         this.currentRecipe = this.recipes.shift();
+
+        // if we're out of recipes, change game state and return early
+        if (!this.currentRecipe) {
+            this.scene.events.emit(RecipeThingy.OUT_OF_RECIPES);
+            return;
+        }
+
         // Every recipe will have water as the first item
         this.currentRecipe.ingredients.unshift(0);
         // Calculate the total needed
