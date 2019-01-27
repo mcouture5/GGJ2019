@@ -117,7 +117,8 @@ export class GameScene extends Phaser.Scene {
         this.binaryInput = new BinaryInputThingy({
             scene: this,
             x: 175,
-            y: 655
+            y: 655,
+            numBoxes: 4
         });
         this.events.addListener('onChange', (binary: number) => {
             this.checkInput(binary)

@@ -11,7 +11,7 @@ import {OneZeroPlaceholder} from "./OneZeroPlaceholder";
 export class BinaryInputThingy extends Phaser.GameObjects.Group {
 
     // the placeholder numbers
-    private static readonly PLACEHOLDERS: number[] = [1, 2, 4, 8];
+    private static readonly PLACEHOLDERS: number[] = [1, 2, 4, 8, 16];
 
     // the X/Y center of this thingy
     private x: number;
@@ -38,7 +38,7 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
     // click SFX
     private click: Phaser.Sound.BaseSound;
 
-    constructor(params: {scene: Phaser.Scene, x: number, y: number}) {
+    constructor(params: {scene: Phaser.Scene, x: number, y: number, numBoxes: number}) {
         super(params.scene);
 
         // set X/Y center
@@ -48,9 +48,9 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
         // create and add placeholders and boxes (from right to left)
         this.boxes = [];
         this.placeholders = [];
-        let boxWidthOffset: number = -1; // goes -1.5, -0.5, 0.5, 1.5
+        let boxWidthOffset: number = -(params.numBoxes * 0.25);
         let botWidthSpacing = 12;
-        for (let i = BinaryInputThingy.PLACEHOLDERS.length - 1; i >= 0; i--) {
+        for (let i = params.numBoxes - 1; i >= 0; i--) {
             let box = new OneZeroInputBox({scene: params.scene, x: 0, y: 0});
             let text: string = BinaryInputThingy.PLACEHOLDERS[i] + '';
             let placeholder = new OneZeroPlaceholder({scene: params.scene, x: 0, y: 0, text: text});
@@ -106,6 +106,17 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
         this.click = this.scene.sound.add('click');
     }
 
+    /**
+     * Destructor. Removes all the child objects from the scene.
+     */
+    public destroy() {
+        for (let i = 0; i < this.boxes.length; i++) {
+            this.remove(this.boxes[i], true)
+        }
+        this.remove(this.pointer, true);
+        this.click.destroy();
+    }
+
     public update() {
         if (Phaser.Input.Keyboard.JustDown(this.leftKey)) {
             this.movePointerLeft();
@@ -144,6 +155,14 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
         this.movePointerToBox(this.boxNum);
     }
 
+    /**
+     * Sets the number of boxes. Always clears all the existing boxes.
+     * @param numBoxes
+     */
+    public setNumBoxes(numBoxes) {
+
+    }
+
     private movePointerLeft() {
         this.boxNum++;
         this.boxNum = Math.min(this.boxNum, this.boxes.length - 1);
@@ -176,7 +195,7 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
 
     private calcTotalValue(oneZeroInputs: number[]): number {
         let totalValue: number = 0;
-        for (let i = 0; i < BinaryInputThingy.PLACEHOLDERS.length; i++) {
+        for (let i = 0; i < this.boxes.length; i++) {
             totalValue += (oneZeroInputs[i] * BinaryInputThingy.PLACEHOLDERS[i]);
         }
         return totalValue;
