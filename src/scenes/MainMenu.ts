@@ -35,19 +35,11 @@ export class MainMenu extends Phaser.Scene {
     }
 
     create() {
-        this.bg = this.add.sprite(400, 300, 'mainmenu-bg');
+        this.bg = this.add.sprite(0, 0, 'mainmenu-bg').setOrigin(0,0);
         this.cameras.main.setBackgroundColor(0xffffff);
 
         this.texts.push(
-            this.add.text(290,180,
-                'Tea Bot',
-                {
-                    'fontFamily': 'Bough',
-                    fontSize: 60,
-                    color: '#000'
-                }
-            ),
-            this.add.text(210,280,
+            this.add.text(320,410,
                 'Press Enter for a tutorial',
                 {
                     fontFamily: 'Bough',
@@ -55,7 +47,7 @@ export class MainMenu extends Phaser.Scene {
                     color: '#000'
                 }
             ),
-            this.add.text(260,330,
+            this.add.text(370,460,
                 'Press space to play',
                 {
                     fontFamily: 'Bough',

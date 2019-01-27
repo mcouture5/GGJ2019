@@ -13,9 +13,11 @@ export class TutorialBox extends Phaser.GameObjects.Group {
     private waitForSpace: boolean;
     private murmurSoundCount: number;
     private murmurSound: Phaser.Sound.BaseSound;
+    private minitb: Phaser.GameObjects.Sprite;
 
-    constructor(params: {scene: Phaser.Scene}) {
+    constructor(params: {scene: Phaser.Scene, minitb: Phaser.GameObjects.Sprite}) {
         super(params.scene);
+        this.minitb = params.minitb;
         this.boxWidth = 350;
         this.boxHeight = 200;
         this.bubble = this.scene.add.rectangle(0, 0, this.boxWidth, 0, 0xffffff)
@@ -36,6 +38,12 @@ export class TutorialBox extends Phaser.GameObjects.Group {
         this.space = this.scene.input.keyboard.addKey(
             Phaser.Input.Keyboard.KeyCodes.SPACE
         );
+        this.scene.anims.create({
+            key: 'talk',
+            frames: [ { key: 'minitb', frame: 0 }, { key: 'minitb', frame: 1 } ],
+            frameRate: 7,
+            repeat: -1
+        });
         this.space.isDown = false;
         this.waitForSpace = true;
 
@@ -50,9 +58,11 @@ export class TutorialBox extends Phaser.GameObjects.Group {
             if (currentlyPrinted.length < this.speech.length) {
                 this.timer && this.timer.destroy();
                 this.text.setText(this.speech);
+                this.minitb.anims.stop();
             } else {
                 this.scene.events.emit('advance');
                 this.speaking = false;
+                this.minitb.anims.stop();
             }
         }
     }
@@ -82,7 +92,6 @@ export class TutorialBox extends Phaser.GameObjects.Group {
     }
 
     shutup() {
-        console.log('shutup');
         this.spaceTween && this.spaceTween.stop();
         this.text.setAlpha(0);
         this.spaceText.setAlpha(0);
@@ -119,6 +128,7 @@ export class TutorialBox extends Phaser.GameObjects.Group {
         this.murmurSoundCount--;
 
         this.speaking = true;
+        this.minitb.anims.play('talk', true);
         let currentlyPrinted = this.text.text;
         if (currentlyPrinted.length < this.speech.length) {
             let portion = this.speech.substr(0, this.speech.length - (this.speech.length - currentlyPrinted.length) + 1);
@@ -129,6 +139,8 @@ export class TutorialBox extends Phaser.GameObjects.Group {
                 delay: 15,
                 repeat: 0
             });
+        } else {
+            this.minitb.anims.stop();
         }
     }
 

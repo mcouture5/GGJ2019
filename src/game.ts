@@ -28,7 +28,7 @@ const config: GameConfig = {
     }
   },
   backgroundColor: '#fff',
-  render: { pixelArt: false, antialias: true, autoResize: true }
+  render: { pixelArt: false, antialias: true, autoResize: false }
 };
 
 // game class

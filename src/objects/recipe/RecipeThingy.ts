@@ -20,17 +20,17 @@ export interface IRecipeData {
 
 let CARD_POSITION = {
     active: {
-        x: 240,
+        x: 215,
         y: 80
     },
     inactive: {
-        x: 240,
+        x: 215,
         y: -121
     }
 }
 
 let ING_POSITION = {
-    x: 240,
+    x: 215,
     y: 13
 }
 export class RecipeThingy extends Phaser.GameObjects.Group {

@@ -11,7 +11,7 @@ enum GameState {
 
 export let TEACUP_POS = {
     active: {
-        x: 600,
+        x: 575,
         y: 475
     },
     inactive: {
@@ -19,6 +19,8 @@ export let TEACUP_POS = {
         y: 475
     }
 }
+
+let thermometerHeight = 370;
 
 export class GameScene extends Phaser.Scene {
     private static readonly TBOT_OK: number = 0;
@@ -44,6 +46,7 @@ export class GameScene extends Phaser.Scene {
     private steam: Phaser.GameObjects.Sprite;
     private activeTeacupIndex: number;
     private speechBubble: Phaser.GameObjects.Sprite;
+    private thermometerBar: Phaser.GameObjects.Shape;
 
     // variables
     private waterTimer: Phaser.Time.TimerEvent;
@@ -51,17 +54,7 @@ export class GameScene extends Phaser.Scene {
     private powerText: Phaser.GameObjects.Text;
     private timeToCoolOff: number;
     private waterTime: number;
-    private temperature: Phaser.GameObjects.Text;
     private fading: boolean;
-    private allowedToRun: boolean;
-
-    // Tutorial stuff
-    private tutorial: {[key: string]: {[key: string]: {[key: string]: string}}}; // hooooly shit
-    private inTutorial: boolean;
-    private hasTakenTutorial: boolean;
-    private tutorialStep: number;
-    private tbotCommand: number;
-    private speaking: boolean;
 
     // Game state
     private state: GameState;
@@ -86,23 +79,13 @@ export class GameScene extends Phaser.Scene {
         this.waterTime = 0;
         this.teacups = [];
 
-        // First time around always has a tutorial
-        this.inTutorial = false;
-        this.hasTakenTutorial = false;
-        this.tutorialStep = 0;
-        this.tbotCommand = 0;
-
         // Starting level
         this.state = GameState.STARTING_LEVEL;
         // starts fading
         this.fading = true;
-        this.allowedToRun = false;
     }
 
     create(): void {
-        // Get the tutorial form the cache
-        this.tutorial = this.cache.json.get('tutorial');
-
         // Create the background and main scene
         this.add.sprite(0, 0, 'background').setOrigin(0, 0);
         this.add.sprite(0, 0, 'table').setOrigin(0, 0);
@@ -159,18 +142,16 @@ export class GameScene extends Phaser.Scene {
         });
 
         // Power text
-        this.powerText = this.add.text(115, 450, '0', {
+        this.powerText = this.add.text(90, 450, '0', {
             fontFamily: 'Digital',
             fontSize: 72,
             color: '#efaad1'
         });
 
         // Temperature
-        this.temperature = this.add.text(500, 450, '0', {
-            fontFamily: 'Digital',
-            fontSize: 72,
-            color: '#000'
-        });
+        this.add.sprite(960, 525, 'thermometer').setDepth(2);
+        this.add.rectangle(958, 498, 30, thermometerHeight, 0x000000);
+        this.thermometerBar = this.add.rectangle(958, 498, 30, thermometerHeight, 0xFF0000).setDepth(1).setAngle(180);
 
         // Listen for camera done fading
         this.cameras.main.once('camerafadeincomplete', (camera) => {
@@ -205,35 +186,7 @@ export class GameScene extends Phaser.Scene {
             });
             this.fading = false;
         }
-        // If we are in the tutorial, run the tutorial scripts
-        if (this.inTutorial) {
-            this.runTutorial();
-        } else {
-            this.runGame();
-        }
-    }
-
-    /**
-     * Checks the state of the tutorial every loop.
-     * Responsible for showing the text, waiting for input, moving tbot, etc.
-     */
-    private runTutorial() {
-    }
-
-    private nextStep() {
-
-    }
-
-    /**
-     * Prints the text charactaer by character then waits until space is pressed to continue.
-     * If space is pressed halfway through, prints the whole string then waits.
-     */
-    private speak(text: string) {
-        console.log(text);
-    }
-
-    private getNextStep() {
-
+        this.runGame();
     }
 
     /**
@@ -271,7 +224,7 @@ export class GameScene extends Phaser.Scene {
 
     private recipeAdded(recipe) {
         this.currentRecipe = recipe;
-        this.temperature.setText('');
+        this.thermometerBar.height = thermometerHeight;
     }
 
     /**
@@ -281,7 +234,7 @@ export class GameScene extends Phaser.Scene {
     private ingredientAdded() {
         // If the item added was the water, start the timer!
         if (this.currentIngredient.name == 'Water') {
-            this.temperature.setText('102');
+            this.thermometerBar.height = thermometerHeight;
             this.waterTimer = this.time.addEvent({
                 callback: this.coolOff,
                 callbackScope: this,
@@ -308,9 +261,7 @@ export class GameScene extends Phaser.Scene {
      */
     private coolOff() {
         this.waterTime++;
-        let temp = parseInt(this.temperature.text);
-        temp -= 1;
-        this.temperature.setText(''+temp);
+        this.thermometerBar.height = thermometerHeight - ((this.waterTime / this.timeToCoolOff) * thermometerHeight);
         if (this.waterTime >= this.timeToCoolOff) {
             this.failRecipe();
         }

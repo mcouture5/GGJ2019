@@ -14,6 +14,8 @@ interface IAction {
     data: any;
 }
 
+let thermometerHeight = 370;
+
 /**
  * Tutorial.
  */
@@ -38,6 +40,7 @@ export class Tutorial extends Phaser.Scene {
     private minitb: Phaser.GameObjects.Sprite;
     private speechBox: TutorialBox;
     private powerText: Phaser.GameObjects.Text;
+    private thermometerBar: Phaser.GameObjects.Shape;
 
     // TUT state
     private state: TutorialState;
@@ -115,7 +118,6 @@ export class Tutorial extends Phaser.Scene {
         this.events.addListener(RecipeThingy.GOT_RECIPE, (recipe) => {
         });
         this.events.addListener('TUT:advance', () => {
-            console.log('next');
             this.nextTbotAction();
         });
 
@@ -137,9 +139,14 @@ export class Tutorial extends Phaser.Scene {
             color: '#efaad1'
         });
 
+        // Temperature
+        this.add.sprite(960, 525, 'thermometer').setDepth(2);
+        this.add.rectangle(958, 498, 30, thermometerHeight, 0x000000);
+        this.thermometerBar = this.add.rectangle(958, 498, 30, thermometerHeight, 0xFF0000).setDepth(1).setAngle(180);
+
         // MiniTb
         this.minitb = this.add.sprite(-200, -200, 'minitb', 0).setDepth(90);
-        this.speechBox = new TutorialBox({scene: this});
+        this.speechBox = new TutorialBox({scene: this, minitb: this.minitb});
         this.events.addListener('advance', () => {
             this.nextTbotAction();
         });
