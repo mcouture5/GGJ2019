@@ -11,6 +11,8 @@ export class TutorialBox extends Phaser.GameObjects.Group {
     private spaceTween: Phaser.Tweens.Tween;
     private speaking: boolean;
     private waitForSpace: boolean;
+    private murmurSoundCount: number;
+    private murmurSound: Phaser.Sound.BaseSound;
 
     constructor(params: {scene: Phaser.Scene}) {
         super(params.scene);
@@ -36,6 +38,9 @@ export class TutorialBox extends Phaser.GameObjects.Group {
         );
         this.space.isDown = false;
         this.waitForSpace = true;
+
+        this.murmurSoundCount = 0;
+        this.murmurSound = this.scene.sound.add("murmur", {volume: 0.25});
     }
 
     update() {
@@ -106,6 +111,12 @@ export class TutorialBox extends Phaser.GameObjects.Group {
 
     
     private printText() {
+        if (this.murmurSoundCount > 7) {
+            this.murmurSoundCount = 0;
+            this.murmurSound.play();
+        }
+        this.murmurSoundCount++;
+
         this.speaking = true;
         let currentlyPrinted = this.text.text;
         if (currentlyPrinted.length < this.speech.length) {

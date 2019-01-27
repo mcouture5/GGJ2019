@@ -287,6 +287,11 @@
                 "type": "audio",
                 "key": "hiss",
                 "url": "assets/sounds/hiss.mp3"
+            },
+            {
+                "type": "audio",
+                "key": "murmur",
+                "url": "assets/sounds/murmur.mp3"
             }
         ]
     }
