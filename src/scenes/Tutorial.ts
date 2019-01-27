@@ -84,8 +84,8 @@ export class Tutorial extends Phaser.Scene {
         this.add.sprite(0, 0, 'table').setOrigin(0, 0);
         this.tbot = this.add.sprite(-1, 170, 'teabot', Tutorial.TBOT_OK).setOrigin(0, 0);
         this.teacups.push(
-            this.add.sprite(TEACUP_POS.active.x, TEACUP_POS.active.y, 'teacup-1').setOrigin(0, 0).setDepth(10),
-            this.add.sprite(TEACUP_POS.inactive.x, TEACUP_POS.inactive.y, 'teacup-2').setOrigin(0, 0).setDepth(10) // off screen
+            this.add.sprite(TEACUP_POS.active.x, TEACUP_POS.active.y, 'teacup-1').setOrigin(0, 0).setDepth(40),
+            this.add.sprite(TEACUP_POS.inactive.x, TEACUP_POS.inactive.y, 'teacup-2').setOrigin(0, 0).setDepth(40) // off screen
         );
         this.activeTeacupIndex = 0;
         this.steam = this.add.sprite(TEACUP_POS.active.x, 0, 'steam').setOrigin(0, 0).setAlpha(0);
@@ -145,7 +145,7 @@ export class Tutorial extends Phaser.Scene {
         this.thermometerBar = this.add.rectangle(958, 498, 30, thermometerHeight, 0xFF0000).setDepth(1).setAngle(180);
 
         // MiniTb
-        this.minitb = this.add.sprite(-200, -200, 'minitb', 0).setDepth(90);
+        this.minitb = this.add.sprite(-200, -200, 'minitb', 0).setDepth(300);
         this.speechBox = new TutorialBox({scene: this, minitb: this.minitb});
         this.events.addListener('advance', () => {
             this.nextTbotAction();
@@ -277,6 +277,7 @@ export class Tutorial extends Phaser.Scene {
                 break;
             case "input":
                 this.state = TutorialState.WAITING;
+                this.teacups.forEach((teacup) => teacup.setDepth(250));
                 this.binaryInput.clearInputs();
                 this.powerText.setText('0');
                 break;

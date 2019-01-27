@@ -22,19 +22,19 @@ export class TutorialBox extends Phaser.GameObjects.Group {
         this.boxHeight = 200;
         this.bubble = this.scene.add.rectangle(0, 0, this.boxWidth, 0, 0xffffff)
             .setStrokeStyle(0x000000, 1)
-            .setDepth(90)
+            .setDepth(300)
             .setOrigin(0,0);
         this.text = this.scene.add.text(0, 0, '', {
             fontFamily: 'Digital',
             fontSize: 22,
             color: '#000000',
             wordWrap: { width: this.boxWidth - 10, useAdvancedWrap: true }
-        }).setDepth(95).setAlpha(0);
+        }).setDepth(310).setAlpha(0);
         this.spaceText = this.scene.add.text(0, 0, '(PRESS SPACE)', {
             fontFamily: 'Digital',
             fontSize: 12,
             color: '#000000'
-        }).setDepth(95).setAlpha(0);
+        }).setDepth(310).setAlpha(0);
         this.space = this.scene.input.keyboard.addKey(
             Phaser.Input.Keyboard.KeyCodes.SPACE
         );
