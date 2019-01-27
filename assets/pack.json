@@ -65,6 +65,11 @@
                 "url": "assets/images/Speechbubble.png"
             },
             {
+                "type": "image",
+                "key": "star",
+                "url": "assets/images/star.png"
+            },
+            {
                 "type": "audio",
                 "key": "beep-boop-loop",
                 "url": "assets/sounds/beep-boop-loop.mp3"

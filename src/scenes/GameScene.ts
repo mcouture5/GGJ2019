@@ -354,6 +354,23 @@ export class GameScene extends Phaser.Scene {
                 this.resetTeacups(false);
             }
         });
+
+        // starry teacups
+        let teacupWidth: number = this.teacups[0].width;
+        let teacupHeight: number = this.teacups[0].height;
+        let starParticles: Phaser.GameObjects.Particles.ParticleEmitterManager = this.add.particles('star');
+        let starEmitter: Phaser.GameObjects.Particles.ParticleEmitter = starParticles.createEmitter({
+            x: TEACUP_POS.active.x + (teacupWidth / 2),
+            y: TEACUP_POS.active.y + (teacupHeight / 8),
+            angle: {min: 225, max: 315},
+            speed: 500,
+            frequency: 100,
+            lifespan: 500
+        });
+        setInterval(() => {
+            starEmitter.stop();
+            starParticles.destroy(true);
+        }, 1250);
     }
 
     /**
