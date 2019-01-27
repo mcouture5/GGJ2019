@@ -202,8 +202,8 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
     }
 
     private getNextIngredient() {
-        // Stop the scene from listening
-        this.scene.events.emit(RecipeThingy.ANIMATE);
+        // Ready for input now
+        this.scene.events.emit(RecipeThingy.READY);
 
         // Pull the active ingredient sprite and meta
         this.currentIngredientObject = this.ingredientsInOrder.shift();
@@ -244,11 +244,7 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
                     },
                     scaleX: 1,
                     scaleY: 1,
-                    duration: 500,
-                    onComplete: () => {
-                        // Ready for input now
-                        this.scene.events.emit(RecipeThingy.READY);
-                    }
+                    duration: 500
                 });
                 // Also shift the remaining ingredients
                 this.scene.tweens.add({

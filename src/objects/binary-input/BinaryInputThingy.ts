@@ -111,10 +111,9 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
      */
     public destroy() {
         for (let i = 0; i < this.boxes.length; i++) {
-            this.remove(this.boxes[i], true)
+            this.remove(this.boxes[i], true);
         }
         this.remove(this.pointer, true);
-        this.click.destroy();
     }
 
     public update() {
