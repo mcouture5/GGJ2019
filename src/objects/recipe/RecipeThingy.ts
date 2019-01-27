@@ -50,8 +50,9 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
     // Dont trust phaser, keep array order
     private ingredientsInOrder: Ingredient[];
 
-    // plop SFX
+    // SFX
     private plopSound: Phaser.Sound.BaseSound;
+    private hissSound: Phaser.Sound.BaseSound;
 
     constructor(params: {scene: Phaser.Scene}) {
         super(params.scene);
@@ -70,8 +71,9 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
         this.card = this.scene.add.rectangle(position.inactive.x, position.inactive.y, 300, 120, 0xffffff)
             .setStrokeStyle(1, 0x000000);
 
-        // set up plop SFX
+        // set up SFX
         this.plopSound = this.scene.sound.add('plop', {volume: 0.75});
+        this.hissSound = this.scene.sound.add('hiss', {volume: 0.25});
     }
 
     public nextRecipe() {
@@ -109,8 +111,13 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
             y: TEACUP_POS.active.y + 100,
             duration: 1000,
             onComplete: () => {
-                // play plop
-                this.plopSound.play();
+                // play hiss for water, plop for everything else
+                if (this.currentIngredientMeta.name === 'Water') {
+                    this.hissSound.play()
+                }
+                else {
+                    this.plopSound.play();
+                }
 
                 // Handle added
                 this.scene.events.emit(RecipeThingy.ADDED);

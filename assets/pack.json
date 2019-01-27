@@ -258,6 +258,11 @@
                 "type": "audio",
                 "key": "too-cold",
                 "url": "assets/sounds/too-cold.mp3"
+            },
+            {
+                "type": "audio",
+                "key": "hiss",
+                "url": "assets/sounds/hiss.mp3"
             }
         ]
     }
