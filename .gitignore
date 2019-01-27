@@ -60,9 +60,6 @@ typings/
 # next.js build output
 .next
 
-# Build dir
-build/bundle.js
-
 # project lock
 package-lock.json
 
