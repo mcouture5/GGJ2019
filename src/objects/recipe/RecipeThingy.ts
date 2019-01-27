@@ -51,7 +51,7 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
     private ingredientsInOrder: Ingredient[];
 
     // plop SFX
-    private plop: Phaser.Sound.BaseSound;
+    private plopSound: Phaser.Sound.BaseSound;
 
     constructor(params: {scene: Phaser.Scene}) {
         super(params.scene);
@@ -71,7 +71,7 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
             .setStrokeStyle(1, 0x000000);
 
         // set up plop SFX
-        this.plop = this.scene.sound.add('plop');
+        this.plopSound = this.scene.sound.add('plop', {volume: 0.75});
     }
 
     public nextRecipe() {
@@ -110,7 +110,7 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
             duration: 1000,
             onComplete: () => {
                 // play plop
-                this.plop.play();
+                this.plopSound.play();
 
                 // Handle added
                 this.scene.events.emit(RecipeThingy.ADDED);

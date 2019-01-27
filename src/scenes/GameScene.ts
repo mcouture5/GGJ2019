@@ -162,7 +162,7 @@ export class GameScene extends Phaser.Scene {
         // set up music and SFX
         this.music = this.sound.add('pentatonic-jam-loop', {loop: true, volume: 0});
         this.music.play();
-        this.correctSound = this.sound.add('correct');
+        this.correctSound = this.sound.add('correct', {volume: 0.75});
         this.tooColdSound = this.sound.add('too-cold');
     }
 
