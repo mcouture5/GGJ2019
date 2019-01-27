@@ -229,7 +229,7 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
             scaleY: 0,
             duration: 500,
             onComplete: () => {
-                this.currentIngredientObject.setX(450).setY(200);
+                this.currentIngredientObject.setX(500).setY(235);
                 this.scene.tweens.add({
                     targets: [this.currentIngredientObject],
                     angle: {
@@ -253,7 +253,7 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
                 // Also shift the remaining ingredients
                 this.scene.tweens.add({
                     targets: this.ingredientsInOrder,
-                    x: '+=150',
+                    x: '+=140',
                     duration: 250
                 });
             }

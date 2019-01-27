@@ -43,6 +43,7 @@ export class GameScene extends Phaser.Scene {
     private teacups: Phaser.GameObjects.Sprite[];
     private steam: Phaser.GameObjects.Sprite;
     private activeTeacupIndex: number;
+    private speechBubble: Phaser.GameObjects.Sprite;
 
     // variables
     private waterTimer: Phaser.Time.TimerEvent;
@@ -112,6 +113,7 @@ export class GameScene extends Phaser.Scene {
         );
         this.activeTeacupIndex = 0;
         this.steam = this.add.sprite(TEACUP_POS.active.x, 0, 'steam').setOrigin(0, 0).setAlpha(0);
+        this.speechBubble = this.add.sprite(350, 150, 'speechbubble').setOrigin(0, 0).setAlpha(0);
 
         // Create the input box and listen to it
         this.binaryInput = new BinaryInputThingy({
@@ -145,6 +147,12 @@ export class GameScene extends Phaser.Scene {
         });
         this.events.addListener(RecipeThingy.GOT_INGREDIENT, (ingredient) => {
             this.currentIngredient = ingredient;
+            // Show speech bubble
+            this.tweens.add({
+                targets: [this.speechBubble],
+                duration: 250,
+                alpha: 1
+            });
         });
         this.events.addListener(RecipeThingy.GOT_RECIPE, (recipe) => {
             this.recipeAdded(recipe);
@@ -284,6 +292,12 @@ export class GameScene extends Phaser.Scene {
         if (this.waterTimer) {
             this.waterTimer.paused = false;
         }
+        // hide speech bubble
+        this.tweens.add({
+            targets: [this.speechBubble],
+            duration: 250,
+            alpha: 0
+        });
         this.currentIngredient = null;
         this.binaryInput.clearInputs();
         this.powerText.setText('0');
