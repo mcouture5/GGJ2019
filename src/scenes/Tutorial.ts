@@ -133,7 +133,7 @@ export class Tutorial extends Phaser.Scene {
         });
 
         // Power text
-        this.powerText = this.add.text(115, 450, '0', {
+        this.powerText = this.add.text(90, 450, '0', {
             fontFamily: 'Digital',
             fontSize: 72,
             color: '#efaad1'

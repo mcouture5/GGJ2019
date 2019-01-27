@@ -158,8 +158,8 @@
     ],
     "recipes": [
         {
-            "name": "Mint Tea with Sugar",
-            "ingredients": [4, 8]
+            "name": "Green Tea",
+            "ingredients": [2]
         }, 
         {
             "name": "Green Tea with Honey and Raspberry",
