@@ -10,6 +10,7 @@ export class TutorialBox extends Phaser.GameObjects.Group {
     private timer: Phaser.Time.TimerEvent;
     private spaceTween: Phaser.Tweens.Tween;
     private speaking: boolean;
+    private waitForSpace: boolean;
 
     constructor(params: {scene: Phaser.Scene}) {
         super(params.scene);
@@ -34,10 +35,11 @@ export class TutorialBox extends Phaser.GameObjects.Group {
             Phaser.Input.Keyboard.KeyCodes.SPACE
         );
         this.space.isDown = false;
+        this.waitForSpace = true;
     }
 
     update() {
-        if (this.speaking && Phaser.Input.Keyboard.JustUp(this.space)) {
+        if (this.speaking && (Phaser.Input.Keyboard.JustUp(this.space) || !this.waitForSpace)) {
             // If still talking, just finish talking
             let currentlyPrinted = this.text.text;
             if (currentlyPrinted.length < this.speech.length) {
@@ -65,7 +67,9 @@ export class TutorialBox extends Phaser.GameObjects.Group {
             duration: 550,
             onComplete: () => {
                 this.text.setText('').setAlpha(1).setSize(200, 200);
-                this.animateSpace();
+                if (this.waitForSpace) {
+                    this.animateSpace();
+                }
                 this.printText();
             }
         });
@@ -84,6 +88,10 @@ export class TutorialBox extends Phaser.GameObjects.Group {
                 this.bubble.setAlpha(0);
             }
         });
+    }
+
+    setWaitForSpace(value) {
+        this.waitForSpace = value;
     }
 
     private animateSpace () {
@@ -106,7 +114,7 @@ export class TutorialBox extends Phaser.GameObjects.Group {
             this.timer = this.scene.time.addEvent({
                 callback: this.printText,
                 callbackScope: this,
-                delay: 20,
+                delay: 15,
                 repeat: 0
             });
         }

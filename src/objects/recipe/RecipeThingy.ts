@@ -58,8 +58,12 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
     private plopSound: Phaser.Sound.BaseSound;
     private hissSound: Phaser.Sound.BaseSound;
 
-    constructor(params: {scene: Phaser.Scene}) {
+    private tutorial: boolean;
+
+    constructor(params: {scene: Phaser.Scene, tutorial: boolean}) {
         super(params.scene);
+
+        this.tutorial = params.tutorial;
 
         // Get the recipies from the cache
         let recipeData = this.scene.cache.json.get('recipes');
@@ -196,12 +200,16 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
             duration: 1300,
             ease: 'Bounce.easeOut',
             onComplete: () => {
-                this.getNextIngredient();
+                if (!this.tutorial) {
+                    this.getNextIngredient();
+                } else {
+                    this.scene.events.emit('TUT:advance');
+                }
             }
         });
     }
 
-    private getNextIngredient() {
+    public getNextIngredient() {
         // Ready for input now
         this.scene.events.emit(RecipeThingy.READY);
 
@@ -264,5 +272,11 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
     }
     getIngredientMeta(index: number) {
         return this.ingredients[index];
+    }
+
+    setDepth (value: number, step: number): Phaser.GameObjects.Group {
+        this.card.setDepth(value);
+        this.ingredientsInOrder.forEach((child) => child.setDepth(value+10));
+        return super.setDepth(value, step);
     }
 }

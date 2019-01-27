@@ -127,7 +127,7 @@ export class GameScene extends Phaser.Scene {
         });
 
         // Create the recipe thingy
-        this.recipeThingy = new RecipeThingy({scene: this});
+        this.recipeThingy = new RecipeThingy({scene: this, tutorial: false});
         // Listen for recipe events
         this.events.addListener(RecipeThingy.GETTING_RECIPE, () => {
             this.tbot.setFrame(GameScene.TBOT_OK);
@@ -192,8 +192,7 @@ export class GameScene extends Phaser.Scene {
     update(): void {
         // Very first update, begin a fade in (camera & music)
         if (this.fading) {
-            // 1300
-            let fadeInDuration: number = 100;
+            let fadeInDuration: number = 1300;
             this.cameras.main.fadeIn(fadeInDuration, 255, 255, 255);
             this.scene.scene.tweens.add({
                 targets: [this.music],
@@ -428,17 +427,13 @@ export class GameScene extends Phaser.Scene {
     private runGame() {
         switch (this.state) {
             case GameState.STARTING_LEVEL:
-                console.log('STARTING_LEVEL...');
                 break;
             case GameState.GETTING_RECIPE:
-                console.log('GETTING_RECIPE...');
                 break;
             case GameState.AWAITING_INPUT:
-                console.log('waiting...');
                 this.binaryInput.update();
                 break;
             case GameState.ANIMATING:
-                console.log('ANIMATING...');
                 break;
         }
     }
