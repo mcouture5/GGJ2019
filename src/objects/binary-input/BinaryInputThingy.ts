@@ -48,7 +48,10 @@ export class BinaryInputThingy extends Phaser.GameObjects.Group {
         // create and add placeholders and boxes (from right to left)
         this.boxes = [];
         this.placeholders = [];
-        let boxWidthOffset: number = -(params.numBoxes * 0.25);
+        let boxWidthOffset: number = -1;
+        if (params.numBoxes === 5) {
+            boxWidthOffset = -1.4;
+        }
         let botWidthSpacing = 12;
         for (let i = params.numBoxes - 1; i >= 0; i--) {
             let box = new OneZeroInputBox({scene: params.scene, x: 0, y: 0});

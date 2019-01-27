@@ -120,7 +120,7 @@ export class GameScene extends Phaser.Scene {
             scene: this,
             x: 175,
             y: 655,
-            numBoxes: 4
+            numBoxes: 5
         });
         this.events.addListener('onChange', (binary: number) => {
             this.checkInput(binary)
