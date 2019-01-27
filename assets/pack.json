@@ -4,7 +4,7 @@
             {
                 "type": "image",
                 "key": "background",
-                "url": "assets/images/bg.png"
+                "url": "assets/images/background.png"
             },
             {
                 "type": "image",
@@ -18,17 +18,12 @@
             },
             {
                 "type": "image",
-                "key": "teabot",
-                "url": "assets/images/teabot.png"
-            },
-            {
-                "type": "image",
                 "key": "teacup-1",
                 "url": "assets/images/cup1.png"
             },
             {
                 "type": "image",
-                "key": "teacup-1",
+                "key": "teacup-2",
                 "url": "assets/images/cup2.png"
             },
             {
@@ -42,15 +37,6 @@
                 "url": "assets/images/teasteam2.png"
             },
             {
-                "type": "spritesheet",
-                "key": "pipe",
-                "url": "assets/images/pipe.png",
-                "frameConfig": {
-                "frameWidth": 20,
-                "frameHeight": 20
-                }
-            },
-            {
                 "type": "image",
                 "key": "tealeaf",
                 "url": "assets/images/tealeaf.png"
@@ -62,6 +48,15 @@
                 "frameConfig": {
                     "frameWidth": 37,
                     "frameHeight": 71
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "teabot",
+                "url": "assets/images/teabot.png",
+                "frameConfig": {
+                    "frameWidth": 415,
+                    "frameHeight": 608
                 }
             },
             {

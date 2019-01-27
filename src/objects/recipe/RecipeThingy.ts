@@ -107,6 +107,21 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
         });
     }
 
+    public restartRecipe() {
+        // Change game state
+        this.scene.events.emit(RecipeThingy.GETTING_RECIPE);
+        // Reset ingredients
+        this.ingredientIndex = 0;
+        this.ingredientsInOrder = [];
+        this.currentIngredientObject = null;
+        // Kill previous ingredients
+        this.clear(true, true);
+        // Show the recipe
+        this.showRecipe();
+        // Give the recipe to the scene
+        this.scene.events.emit(RecipeThingy.GOT_RECIPE);
+    }
+
     private recipeComplete() {
         this.scene.events.emit(RecipeThingy.COMPLETE);
     }

@@ -9,12 +9,30 @@ enum GameState {
     ANIMATING
 }
 
+let TEACUP_POS = {
+    active: {
+        x: 600,
+        y: 500
+    },
+    inactive: {
+        x: 2000,
+        y: 500
+    }
+}
+
 export class GameScene extends Phaser.Scene {
+    private static readonly TBOT_OK: number = 0;
+    private static readonly TBOT_HAPPY: number = 1;
+    private static readonly TBOT_SAD: number = 2;
+
     // objects
     private binaryInput: BinaryInputThingy;
     private recipeThingy: RecipeThingy;
     private currentRecipe: IRecipe;
     private currentIngredient: IIngredient;
+    private tbot: Phaser.GameObjects.Sprite;
+    private teacups: Phaser.GameObjects.Sprite[];
+    private activeTeacupIndex: number;
 
     // variables
     private waterTimer: Phaser.Time.TimerEvent;
@@ -22,6 +40,7 @@ export class GameScene extends Phaser.Scene {
     private powerText: Phaser.GameObjects.Text;
     private timeToCoolOff: number;
     private waterTime: number;
+    private temperature: Phaser.GameObjects.Text;
 
     // Tutorial stuff
     private tutorial: {[key: string]: {[key: string]: {[key: string]: string}}}; // hooooly shit
@@ -49,8 +68,10 @@ export class GameScene extends Phaser.Scene {
 
         // variables
         this.score = -1;
-        this.timeToCoolOff = 10;
+        // Iterations in half seconds
+        this.timeToCoolOff = 20;
         this.waterTime = 0;
+        this.teacups = [];
 
         // First time around always has a tutorial
         this.inTutorial = false;
@@ -67,9 +88,14 @@ export class GameScene extends Phaser.Scene {
         this.tutorial = this.cache.json.get('tutorial');
 
         // Create the background and main scene
+        this.add.sprite(0, 0, 'background').setOrigin(0, 0);
         this.add.sprite(0, 0, 'table').setOrigin(0, 0);
-        this.add.sprite(-1, 170, 'teabot').setOrigin(0, 0);
-        this.add.sprite(600, 500, 'teacup-1').setOrigin(0, 0);
+        this.tbot = this.add.sprite(-1, 170, 'teabot', GameScene.TBOT_OK).setOrigin(0, 0);
+        this.teacups.push(
+            this.add.sprite(TEACUP_POS.active.x, TEACUP_POS.active.y, 'teacup-1').setOrigin(0, 0),
+            this.add.sprite(TEACUP_POS.inactive.x, TEACUP_POS.inactive.y, 'teacup-2').setOrigin(0, 0) // off screen
+        );
+        this.activeTeacupIndex = 0;
 
         // Create the input box and listen to it
         this.binaryInput = new BinaryInputThingy({
@@ -85,48 +111,41 @@ export class GameScene extends Phaser.Scene {
         this.recipeThingy = new RecipeThingy({scene: this});
         // Listen for recipe events
         this.events.addListener(RecipeThingy.GETTING_RECIPE, () => {
+            this.tbot.setFrame(GameScene.TBOT_OK);
             this.state = GameState.GETTING_RECIPE;
         });
         this.events.addListener(RecipeThingy.READY, () => {
             this.state = GameState.AWAITING_INPUT;
         });
         this.events.addListener(RecipeThingy.COMPLETE, () => {
-            this.handleCompleteRecipe();
+            this.completeRecipe();
         });
         this.events.addListener(RecipeThingy.ANIMATE, () => {
             this.state = GameState.ANIMATING;
         });
         this.events.addListener(RecipeThingy.ADDED, () => {
-            this.handleItemAdded();
+            this.ingredientAdded();
         });
         this.events.addListener(RecipeThingy.GOT_INGREDIENT, (ingredient) => {
             this.currentIngredient = ingredient;
         });
         this.events.addListener(RecipeThingy.GOT_RECIPE, (recipe) => {
-            this.currentRecipe = recipe;
+            this.recipeAdded(recipe);
         });
 
         // Power text
-        this.powerText = this.add.text(150, 450, '0', {
+        this.powerText = this.add.text(115, 450, '0', {
             fontFamily: 'Digital',
             fontSize: 72,
             color: '#000'
         });
-/*
-        this.scoreText = this.add.text(this.sys.canvas.width / 2 - 14, 30, '0', {
-            fontFamily: 'Cavalcade-Shadow',
-            fontSize: 40
-        });
 
-        this.scoreText.setDepth(2);
-
-        this.timer = this.time.addEvent({
-            delay: 1500,
-            callback: this.addRowOfPipes,
-            callbackScope: this,
-            loop: true
+        // Temperature
+        this.temperature = this.add.text(500, 450, '0', {
+            fontFamily: 'Digital',
+            fontSize: 72,
+            color: '#000'
         });
-        */
 
         // Get the first recipe
         this.state = GameState.GETTING_RECIPE;
@@ -169,26 +188,42 @@ export class GameScene extends Phaser.Scene {
      * Checks input for the correct value.
      */
     private checkInput(value: number) {
+        this.powerText.setText(''+value);
         if (value == this.currentIngredient.value) {
+            // Pause the timer, shouldnt be penalized for something you cant do...
+            if (this.waterTimer) {
+                this.waterTimer.paused = true;
+            }
             this.recipeThingy.addToTea();
         }
     }
 
+    private recipeAdded(recipe) {
+        this.currentRecipe = recipe;
+        this.temperature.setText('');
+    }
+
     /**
      * Handles when an item is successfully added.
+     * This is called after the drop animation finishes.
      */
-    private handleItemAdded() {
+    private ingredientAdded() {
         // If the item added was the water, start the timer!
         if (this.currentIngredient.key == 'water') {
+            this.temperature.setText('102');
             this.waterTimer = this.time.addEvent({
                 callback: this.coolOff,
                 callbackScope: this,
-                delay: 1000,
+                delay: 500,
                 repeat: this.timeToCoolOff
             });
         }
+        if (this.waterTimer) {
+            this.waterTimer.paused = false;
+        }
         this.currentIngredient = null;
         this.binaryInput.clearInputs();
+        this.powerText.setText('0');
     }
 
     /**
@@ -196,24 +231,85 @@ export class GameScene extends Phaser.Scene {
      */
     private coolOff() {
         this.waterTime++;
-        console.log(this.waterTime);
+        let temp = parseInt(this.temperature.text);
+        temp -= 1;
+        this.temperature.setText(''+temp);
         if (this.waterTime >= this.timeToCoolOff) {
-            // Fail conditon
+            this.failRecipe();
         }
+    }
+
+    /**
+     * Fail to complete the recipe in time.
+     */
+    private failRecipe() {
+        this.state = GameState.STARTING_LEVEL;
+        // Immediately stop the timer
+        this.waterTime = 0;
+        this.waterTimer.destroy();
+
+        // TBOT IS SAD
+        this.tbot.setFrame(GameScene.TBOT_SAD);
+
+        // Begin resetting tcups
+        this.resetTeacups(true);
     }
 
     /**
      * Handle when the recipe is complete
      */
-    private handleCompleteRecipe() {
+    private completeRecipe() {
         this.state = GameState.GETTING_RECIPE;
         this.recipeThingy.nextRecipe();
         this.waterTime = 0;
         this.waterTimer.destroy();
+        this.resetTeacups(false);
+    }
+
+    /**
+     * Resets the teacups by swapping who is visible
+     */
+    private resetTeacups(fail: boolean) {
+        let activeteacup = this.teacups[this.activeTeacupIndex];
+        this.tweens.add({
+            targets: [activeteacup],
+            x: TEACUP_POS.inactive.x,
+            duration: 1500
+        });
+        if (this.activeTeacupIndex == 0) {
+            this.activeTeacupIndex = 1;
+        } else {
+            this.activeTeacupIndex = 0;
+        }
+        activeteacup = this.teacups[this.activeTeacupIndex];
+        this.tweens.add({
+            targets: [activeteacup],
+            x: TEACUP_POS.active.x,
+            duration: 1500,
+            onComplete: () => {
+                if (fail) {
+                    this.restartLevel();
+                } else {
+                    this.restartLevel();
+                }
+            }
+        });
+    }
+
+    /**
+     * Restarts the level by clearing text and variables andreseeting the recipe thingy.
+     */
+    private restartLevel() {
+        this.binaryInput.clearInputs();
+        this.powerText.setText('0');
+        this.recipeThingy.restartRecipe();
     }
 
     private runGame() {
         switch (this.state) {
+            case GameState.STARTING_LEVEL:
+                console.log('STARTING_LEVEL...');
+                break;
             case GameState.GETTING_RECIPE:
                 console.log('GETTING_RECIPE...');
                 break;
