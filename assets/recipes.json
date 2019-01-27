@@ -1,33 +1,253 @@
 {
-    "ingredients": {
-        "water": {
+    "ingredients": [
+        {
             "name": "Water",
-            "key": "water",
-            "value": 7
+            "key": "ing-1",
+            "value": 1
         },
-        "tealeaf": {
-            "name": "Tea Leaf",
-            "key": "tealeaf",
+        {
+            "name": "Black Tea Leaves",
+            "key": "ing-2",
+            "value": 2
+        },
+        {
+            "name": "Green Tea Leaves",
+            "key": "ing-3",
+            "value": 3
+        },
+        {
+            "name": "White Tea Leaves",
+            "key": "ing-4",
             "value": 4
         },
-        "sugar": {
+        {
+            "name": "Mint",
+            "key": "ing-5",
+            "value": 5
+        },
+        {
+            "name": "Rooibos",
+            "key": "ing-6",
+            "value": 6
+        },
+        {
+            "name": "Chamomile",
+            "key": "ing-7",
+            "value": 7
+        },
+        {
+            "name": "Honey",
+            "key": "ing-8",
+            "value": 8
+        },
+        {
             "name": "Sugar",
-            "key": "sugar",
-            "value": 3
+            "key": "ing-9",
+            "value": 9
+        },
+        {
+            "name": "Milk",
+            "key": "ing-10",
+            "value": 10
+        },
+        {
+            "name": "Jasmine",
+            "key": "ing-11",
+            "value": 11
+        },
+        {
+            "name": "Raspberry",
+            "key": "ing-12",
+            "value": 12
+        },
+        {
+            "name": "Blueberry",
+            "key": "ing-13",
+            "value": 13
+        },
+        {
+            "name": "Orange",
+            "key": "ing-14",
+            "value": 14
+        },
+        {
+            "name": "Vanilla",
+            "key": "ing-15",
+            "value": 15
+        },
+        {
+            "name": "Star Anise",
+            "key": "ing-16",
+            "value": 16
+        },
+        {
+            "name": "Ginger",
+            "key": "ing-17",
+            "value": 17
+        },
+        {
+            "name": "Lemon",
+            "key": "ing-18",
+            "value": 18
+        },
+        {
+            "name": "Rose",
+            "key": "ing-19",
+            "value": 19
+        },
+        {
+            "name": "Cucumber",
+            "key": "ing-20",
+            "value": 20
+        },
+        {
+            "name": "Pineapple",
+            "key": "ing-21",
+            "value": 21
+        },
+        {
+            "name": "Cloves",
+            "key": "ing-22",
+            "value": 22
+        },
+        {
+            "name": "Cocao",
+            "key": "ing-23",
+            "value": 23
+        },
+        {
+            "name": "Lime",
+            "key": "ing-24",
+            "value": 24
+        },
+        {
+            "name": "Cinnamon",
+            "key": "ing-25",
+            "value": 25
+        },
+        {
+            "name": "Apple",
+            "key": "ing-26",
+            "value": 26
+        },
+        {
+            "name": "Nutmeg",
+            "key": "ing-27",
+            "value": 27
+        },
+        {
+            "name": "Cornflower",
+            "key": "ing-28",
+            "value": 28
+        },
+        {
+            "name": "Lemon Grass",
+            "key": "ing-29",
+            "value": 29
+        },
+        {
+            "name": "Coconut",
+            "key": "ing-30",
+            "value": 30
+        },
+        {
+            "name": "Hibicsus",
+            "key": "ing-31",
+            "value": 31
         }
-    },
+    ],
     "recipes": [
         {
-            "name": "Test",
-            "ingredients": ["tealeaf", "tealeaf", "tealeaf"]
-        }, 
-        {
             "name": "Green Tea",
-            "ingredients": [ "tealeaf", "sugar"]
+            "ingredients": [2]
         }, 
         {
             "name": "Black Tea",
-            "ingredients": ["tealeaf", "tealeaf", "sugar"]
+            "ingredients": [3]
+        }, 
+        {
+            "name": "White Tea",
+            "ingredients": [4]
+        }, 
+        {
+            "name": "White Tea",
+            "ingredients": [5]
+        }, 
+        {
+            "name": "White Tea",
+            "ingredients": [6]
+        }, 
+        {
+            "name": "White Tea",
+            "ingredients": [7]
+        }, 
+        {
+            "name": "White Tea",
+            "ingredients": [2,8]
+        }, 
+        {
+            "name": "White Tea",
+            "ingredients": [3,8]
+        }, 
+        {
+            "name": "White Tea",
+            "ingredients": [4,8]
+        }, 
+        {
+            "name": "White Tea",
+            "ingredients": [6,8]
+        }, 
+        {
+            "name": "White Tea",
+            "ingredients": [7,8]
+        }, 
+        {
+            "name": "White Tea",
+            "ingredients": [2,9]
+        }, 
+        {
+            "name": "White Tea",
+            "ingredients": [3,9]
+        }, 
+        {
+            "name": "White Tea",
+            "ingredients": [4,9]
+        }, 
+        {
+            "name": "White Tea",
+            "ingredients": [5,9]
+        }, 
+        {
+            "name": "White Tea",
+            "ingredients": [6,9]
+        }, 
+        {
+            "name": "White Tea",
+            "ingredients": [7,9]
+        }, 
+        {
+            "name": "White Tea",
+            "ingredients": [2,10]
+        }, 
+        {
+            "name": "White Tea",
+            "ingredients": [3,10]
+        }, 
+        {
+            "name": "White Tea",
+            "ingredients": [4,10]
+        }, 
+        {
+            "name": "White Tea",
+            "ingredients": [6,10]
+        }, 
+        {
+            "name": "White Tea",
+            "ingredients": [7,10]
+        }, 
+        {
+            "name": "White Tea",
+            "ingredients": [2,9,10]
         }
     ]
 }

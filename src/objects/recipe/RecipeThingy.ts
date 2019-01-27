@@ -1,4 +1,5 @@
 import { Ingredient } from "./Ingredient";
+import { TEACUP_POS } from "../../scenes/GameScene";
 
 export interface IIngredient {
     name: string;
@@ -8,12 +9,12 @@ export interface IIngredient {
 
 export interface IRecipe {
     name: string;
-    ingredients: string[];
+    ingredients: number[];
     total?: number;
 }
 
 export interface IRecipeData {
-    ingredients: {[key: string]: IIngredient};
+    ingredients: IIngredient[];
     recipes: Array<IRecipe>;
 }
 
@@ -66,7 +67,7 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
         this.currentIngredientObject = null;
 
         // Create and add the card
-        this.card = this.scene.add.rectangle(position.inactive.x, position.inactive.y, 400, 120, 0xffffff)
+        this.card = this.scene.add.rectangle(position.inactive.x, position.inactive.y, 300, 120, 0xffffff)
             .setStrokeStyle(1, 0x000000);
 
         // set up plop SFX
@@ -83,7 +84,7 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
         // Pull the next recipe from the data
         this.currentRecipe = this.recipes.shift();
         // Every recipe will have water as the first item
-        this.currentRecipe.ingredients.unshift('water');
+        this.currentRecipe.ingredients.unshift(0);
         // Calculate the total needed
         // Not needed, but i wrote this correctly on the first shot so im keepin it.
         this.currentRecipe.total = this.currentRecipe.ingredients.map((ingredient) => this.ingredients[ingredient].value)
@@ -104,8 +105,8 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
         // Add dropping anim
         this.scene.tweens.add({
             targets: [this.currentIngredientObject],
-            x: 400,
-            y: 400,
+            x: TEACUP_POS.active.x + 100,
+            y: TEACUP_POS.active.y + 100,
             duration: 1000,
             onComplete: () => {
                 // play plop
@@ -118,7 +119,7 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
                 this.currentIngredientObject.destroy();
 
                 // If no more ingredients, the recipe is complete
-                if (this.ingredientIndex >= this.currentRecipe.ingredients.length) {
+                if (this.ingredientIndex == this.currentRecipe.ingredients.length) {
                     this.recipeComplete();
                 } else {
                     this.getNextIngredient();
@@ -161,10 +162,11 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
             let ingMeta = this.getIngredientMeta(ingredient);
             let ingSprite = new Ingredient({
                 scene: this.scene,
-                x: position.inactive.x + (count * 50),
+                x: position.inactive.x + (count * 50) - (this.card.width / 2),
                 y: position.inactive.y,
                 key: ingMeta.key
             });
+            ingSprite.setX(ingSprite.x + (ingSprite.width / 2));
             this.add(ingSprite, true);
             this.ingredientsInOrder.push(ingSprite);
             count++;
@@ -202,19 +204,48 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
         // Tween to move from the current ingredients
         this.scene.tweens.add({
             targets: [this.currentIngredientObject],
-            x: 20,
-            y: 20,
+            angle: {
+                getEnd: function (target, key, value)
+                {
+                    return target.angle - 180;
+                },
+                getStart: function (target, key, value)
+                {
+                    return target.angle;
+                }
+            },
+            scaleX: 0,
+            scaleY: 0,
             duration: 500,
             onComplete: () => {
-                // Ready for input now
-                this.scene.events.emit(RecipeThingy.READY);
+                this.currentIngredientObject.setX(450).setY(200);
+                this.scene.tweens.add({
+                    targets: [this.currentIngredientObject],
+                    angle: {
+                        getEnd: function (target, key, value)
+                        {
+                            return target.angle + 180;
+                        },
+                        getStart: function (target, key, value)
+                        {
+                            return target.angle;
+                        }
+                    },
+                    scaleX: 1,
+                    scaleY: 1,
+                    duration: 500,
+                    onComplete: () => {
+                        // Ready for input now
+                        this.scene.events.emit(RecipeThingy.READY);
+                    }
+                });
+                // Also shift the remaining ingredients
+                this.scene.tweens.add({
+                    targets: this.ingredientsInOrder,
+                    x: '-=50',
+                    duration: 250
+                });
             }
-        });
-        // Also shift the remaining ingredients
-        this.scene.tweens.add({
-            targets: this.ingredientsInOrder,
-            x: '-=50',
-            duration: 250
         });
 
         // Increment
@@ -224,7 +255,7 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
     getCurrentIngredientMeta() {
         return this.getIngredientMeta(this.currentRecipe.ingredients[this.ingredientIndex]);
     }
-    getIngredientMeta(key: string) {
-        return this.ingredients[key];
+    getIngredientMeta(index: number) {
+        return this.ingredients[index];
     }
 }

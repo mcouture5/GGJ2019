@@ -9,7 +9,7 @@ enum GameState {
     ANIMATING
 }
 
-let TEACUP_POS = {
+export let TEACUP_POS = {
     active: {
         x: 600,
         y: 500
@@ -100,8 +100,8 @@ export class GameScene extends Phaser.Scene {
         this.add.sprite(0, 0, 'table').setOrigin(0, 0);
         this.tbot = this.add.sprite(-1, 170, 'teabot', GameScene.TBOT_OK).setOrigin(0, 0);
         this.teacups.push(
-            this.add.sprite(TEACUP_POS.active.x, TEACUP_POS.active.y, 'teacup-1').setOrigin(0, 0),
-            this.add.sprite(TEACUP_POS.inactive.x, TEACUP_POS.inactive.y, 'teacup-2').setOrigin(0, 0) // off screen
+            this.add.sprite(TEACUP_POS.active.x, TEACUP_POS.active.y, 'teacup-1').setOrigin(0, 0).setDepth(10),
+            this.add.sprite(TEACUP_POS.inactive.x, TEACUP_POS.inactive.y, 'teacup-2').setOrigin(0, 0).setDepth(10) // off screen
         );
         this.activeTeacupIndex = 0;
 
@@ -240,7 +240,7 @@ export class GameScene extends Phaser.Scene {
      */
     private ingredientAdded() {
         // If the item added was the water, start the timer!
-        if (this.currentIngredient.key == 'water') {
+        if (this.currentIngredient.name == 'Water') {
             this.temperature.setText('102');
             this.waterTimer = this.time.addEvent({
                 callback: this.coolOff,
@@ -293,6 +293,10 @@ export class GameScene extends Phaser.Scene {
         this.state = GameState.GETTING_RECIPE;
         this.waterTime = 0;
         this.waterTimer.destroy();
+        
+        // TBOT IS HAPPY
+        this.tbot.setFrame(GameScene.TBOT_HAPPY);
+
         this.resetTeacups(false);
     }
 
@@ -320,7 +324,7 @@ export class GameScene extends Phaser.Scene {
                 if (fail) {
                     this.restartLevel();
                 } else {
-                    this.recipeThingy.nextRecipe();
+                    this.nextLevel();
                 }
             }
         });
@@ -333,6 +337,10 @@ export class GameScene extends Phaser.Scene {
         this.binaryInput.clearInputs();
         this.powerText.setText('0');
         this.recipeThingy.restartRecipe();
+    }
+
+    private nextLevel() {
+        this.recipeThingy.nextRecipe();
     }
 
     private runGame() {

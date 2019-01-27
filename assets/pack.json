@@ -37,11 +37,6 @@
                 "url": "assets/images/teasteam2.png"
             },
             {
-                "type": "image",
-                "key": "tealeaf",
-                "url": "assets/images/tealeaf.png"
-            },
-            {
                 "type": "spritesheet",
                 "key": "switch",
                 "url": "assets/images/toggles.png",
@@ -83,6 +78,161 @@
                 "type": "audio",
                 "key": "plop",
                 "url": "assets/sounds/plop.mp3"
+            },
+            {
+                "type": "image",
+                "key": "ing-1",
+                "url": "assets/images/ingredients/1.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-2",
+                "url": "assets/images/ingredients/2.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-3",
+                "url": "assets/images/ingredients/3.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-4",
+                "url": "assets/images/ingredients/4.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-5",
+                "url": "assets/images/ingredients/5.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-6",
+                "url": "assets/images/ingredients/6.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-7",
+                "url": "assets/images/ingredients/7.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-8",
+                "url": "assets/images/ingredients/8.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-9",
+                "url": "assets/images/ingredients/9.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-10",
+                "url": "assets/images/ingredients/10.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-11",
+                "url": "assets/images/ingredients/11.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-12",
+                "url": "assets/images/ingredients/12.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-13",
+                "url": "assets/images/ingredients/13.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-14",
+                "url": "assets/images/ingredients/14.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-15",
+                "url": "assets/images/ingredients/15.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-16",
+                "url": "assets/images/ingredients/16.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-17",
+                "url": "assets/images/ingredients/17.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-18",
+                "url": "assets/images/ingredients/18.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-19",
+                "url": "assets/images/ingredients/19.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-20",
+                "url": "assets/images/ingredients/20.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-21",
+                "url": "assets/images/ingredients/21.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-22",
+                "url": "assets/images/ingredients/22.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-23",
+                "url": "assets/images/ingredients/23.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-24",
+                "url": "assets/images/ingredients/24.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-25",
+                "url": "assets/images/ingredients/25.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-26",
+                "url": "assets/images/ingredients/26.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-27",
+                "url": "assets/images/ingredients/27.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-28",
+                "url": "assets/images/ingredients/28.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-29",
+                "url": "assets/images/ingredients/29.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-30",
+                "url": "assets/images/ingredients/30.png"
+            },
+            {
+                "type": "image",
+                "key": "ing-31",
+                "url": "assets/images/ingredients/31.png"
             }
         ]
     }
