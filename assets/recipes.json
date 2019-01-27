@@ -158,96 +158,44 @@
     ],
     "recipes": [
         {
-            "name": "Green Tea",
-            "ingredients": [2]
+            "name": "Mint Tea with Sugar",
+            "ingredients": [4, 8]
         }, 
         {
-            "name": "Black Tea",
-            "ingredients": [3]
+            "name": "Green Tea with Honey and Raspberry",
+            "ingredients": [2, 7, 11]
         }, 
         {
-            "name": "White Tea",
-            "ingredients": [4]
+            "name": "Jasmine Tea",
+            "ingredients": [3, 8, 10]
         }, 
         {
-            "name": "White Tea",
-            "ingredients": [5]
+            "name": "Vanilla Rooibos with Honey",
+            "ingredients": [5, 7, 14]
         }, 
         {
-            "name": "White Tea",
-            "ingredients": [6]
+            "name": "Sleepy Time ",
+            "ingredients": [6, 18, 28, 4]
         }, 
         {
-            "name": "White Tea",
-            "ingredients": [7]
+            "name": "Black Tea with Honey and Lemon",
+            "ingredients": [1, 7, 17]
         }, 
         {
-            "name": "White Tea",
-            "ingredients": [2,8]
+            "name": "London Fog",
+            "ingredients": [1, 8, 9, 14]
         }, 
         {
-            "name": "White Tea",
-            "ingredients": [3,8]
+            "name": "Lady Grey Tea",
+            "ingredients": [1, 27, 13, 8]
         }, 
         {
-            "name": "White Tea",
-            "ingredients": [4,8]
+            "name": "Winterberry Tea",
+            "ingredients": [3, 12, 8]
         }, 
         {
-            "name": "White Tea",
-            "ingredients": [6,8]
-        }, 
-        {
-            "name": "White Tea",
-            "ingredients": [7,8]
-        }, 
-        {
-            "name": "White Tea",
-            "ingredients": [2,9]
-        }, 
-        {
-            "name": "White Tea",
-            "ingredients": [3,9]
-        }, 
-        {
-            "name": "White Tea",
-            "ingredients": [4,9]
-        }, 
-        {
-            "name": "White Tea",
-            "ingredients": [5,9]
-        }, 
-        {
-            "name": "White Tea",
-            "ingredients": [6,9]
-        }, 
-        {
-            "name": "White Tea",
-            "ingredients": [7,9]
-        }, 
-        {
-            "name": "White Tea",
-            "ingredients": [2,10]
-        }, 
-        {
-            "name": "White Tea",
-            "ingredients": [3,10]
-        }, 
-        {
-            "name": "White Tea",
-            "ingredients": [4,10]
-        }, 
-        {
-            "name": "White Tea",
-            "ingredients": [6,10]
-        }, 
-        {
-            "name": "White Tea",
-            "ingredients": [7,10]
-        }, 
-        {
-            "name": "White Tea",
-            "ingredients": [2,9,10]
+            "name": "Chai Tea Latte",
+            "ingredients": [1, 15, 16, 21, 24, 26]
         }
     ]
 }
