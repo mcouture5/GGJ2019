@@ -28,13 +28,8 @@
             },
             {
                 "type": "image",
-                "key": "teasteam-1",
-                "url": "assets/images/teasteam1.png"
-            },
-            {
-                "type": "image",
-                "key": "teasteam-1",
-                "url": "assets/images/teasteam2.png"
+                "key": "steam",
+                "url": "assets/images/steam.png"
             },
             {
                 "type": "spritesheet",

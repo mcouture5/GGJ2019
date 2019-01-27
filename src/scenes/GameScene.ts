@@ -12,11 +12,11 @@ enum GameState {
 export let TEACUP_POS = {
     active: {
         x: 600,
-        y: 500
+        y: 475
     },
     inactive: {
         x: 2000,
-        y: 500
+        y: 475
     }
 }
 
@@ -41,6 +41,7 @@ export class GameScene extends Phaser.Scene {
     private currentIngredient: IIngredient;
     private tbot: Phaser.GameObjects.Sprite;
     private teacups: Phaser.GameObjects.Sprite[];
+    private steam: Phaser.GameObjects.Sprite;
     private activeTeacupIndex: number;
 
     // variables
@@ -110,6 +111,7 @@ export class GameScene extends Phaser.Scene {
             this.add.sprite(TEACUP_POS.inactive.x, TEACUP_POS.inactive.y, 'teacup-2').setOrigin(0, 0).setDepth(10) // off screen
         );
         this.activeTeacupIndex = 0;
+        this.steam = this.add.sprite(TEACUP_POS.active.x, 0, 'steam').setOrigin(0, 0).setAlpha(0);
 
         // Create the input box and listen to it
         this.binaryInput = new BinaryInputThingy({
@@ -160,8 +162,6 @@ export class GameScene extends Phaser.Scene {
             fontSize: 72,
             color: '#000'
         });
-
-        // Get the first recipe
 
         // set up music and SFX
         this.music = this.sound.add('pentatonic-jam-loop', {loop: true, volume: 0});
@@ -330,7 +330,15 @@ export class GameScene extends Phaser.Scene {
         // TBOT IS HAPPY
         this.tbot.setFrame(GameScene.TBOT_HAPPY);
 
-        this.resetTeacups(false);
+        // Steamy teacups
+        this.tweens.add({
+            targets: [this.steam],
+            duration: 1250,
+            alpha: 1,
+            onComplete: () => {
+                this.resetTeacups(false);
+            }
+        });
     }
 
     /**
@@ -339,26 +347,34 @@ export class GameScene extends Phaser.Scene {
     private resetTeacups(fail: boolean) {
         let activeteacup = this.teacups[this.activeTeacupIndex];
         this.tweens.add({
-            targets: [activeteacup],
+            targets: [activeteacup, this.steam],
             x: TEACUP_POS.inactive.x,
-            duration: 1500
-        });
-        if (this.activeTeacupIndex == 0) {
-            this.activeTeacupIndex = 1;
-        } else {
-            this.activeTeacupIndex = 0;
-        }
-        activeteacup = this.teacups[this.activeTeacupIndex];
-        this.tweens.add({
-            targets: [activeteacup],
-            x: TEACUP_POS.active.x,
-            duration: 1500,
+            duration: 500,
             onComplete: () => {
-                if (fail) {
-                    this.restartLevel();
+                // Hide steam
+                this.steam.setAlpha(0);
+
+                // Swicth active teacup
+                if (this.activeTeacupIndex == 0) {
+                    this.activeTeacupIndex = 1;
                 } else {
-                    this.nextLevel();
+                    this.activeTeacupIndex = 0;
                 }
+                activeteacup = this.teacups[this.activeTeacupIndex];
+
+                // Bring it in!
+                this.tweens.add({
+                    targets: [activeteacup, this.steam],
+                    x: TEACUP_POS.active.x,
+                    duration: 500,
+                    onComplete: () => {
+                        if (fail) {
+                            this.restartLevel();
+                        } else {
+                            this.nextLevel();
+                        }
+                    }
+                });
             }
         });
     }
