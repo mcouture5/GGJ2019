@@ -81,9 +81,9 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
         this.card = this.scene.add.sprite(CARD_POSITION.inactive.x, CARD_POSITION.inactive.y, 'recipecard');
 
         // set up recipe name text
-        this.recipeNameText = this.scene.add.text(CARD_POSITION.active.x - 180, CARD_POSITION.active.y - 80, '', {
+        this.recipeNameText = this.scene.add.text(CARD_POSITION.active.x - 180, CARD_POSITION.active.y - 70, '', {
             fontFamily: 'Digital',
-            fontSize: 32,
+            fontSize: 22,
             color: '#000000',
             align: 'center'
         })
