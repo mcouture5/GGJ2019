@@ -7,6 +7,7 @@ export class MainMenu extends Phaser.Scene {
     private texts: Phaser.GameObjects.Text[] = [];
     private bg: Phaser.GameObjects.Sprite;
     private fade = Phaser.Cameras.Scene2D.Effects.Fade;
+    private fading: boolean;
 
     constructor() {
         super({
@@ -20,6 +21,7 @@ export class MainMenu extends Phaser.Scene {
         );
         this.startKey.isDown = false;
         this.bg = null;
+        this.fading = false;
     }
 
     create() {
@@ -52,9 +54,10 @@ export class MainMenu extends Phaser.Scene {
     }
 
     update() {
-        if (this.startKey.isDown) {
-            //2000
-            this.cameras.main.fadeOut(2, 255, 255, 255);
+        if (!this.fading && Phaser.Input.Keyboard.JustDown(this.startKey)) {
+            // 2000
+            this.cameras.main.fadeOut(1, 255, 255, 255);
+            this.fading = true;
         }
     }
 }

@@ -41,6 +41,8 @@ export class GameScene extends Phaser.Scene {
     private timeToCoolOff: number;
     private waterTime: number;
     private temperature: Phaser.GameObjects.Text;
+    private fading: boolean;
+    private allowedToRun: boolean;
 
     // Tutorial stuff
     private tutorial: {[key: string]: {[key: string]: {[key: string]: string}}}; // hooooly shit
@@ -81,6 +83,9 @@ export class GameScene extends Phaser.Scene {
 
         // Starting level
         this.state = GameState.STARTING_LEVEL;
+        // starts fading
+        this.fading = true;
+        this.allowedToRun = false;
     }
 
     create(): void {
@@ -148,11 +153,20 @@ export class GameScene extends Phaser.Scene {
         });
 
         // Get the first recipe
-        this.state = GameState.GETTING_RECIPE;
-        this.recipeThingy.nextRecipe();
     }
 
     update(): void {
+        // Very first update, begin a fade in
+        if (this.fading) {
+            // 1300
+            this.cameras.main.fadeIn(100, 255, 255, 255, (cam, progress) => {
+                if (progress == 1) {
+                    this.state = GameState.GETTING_RECIPE;
+                    this.recipeThingy.nextRecipe();
+                }
+            });
+            this.fading = false;
+        }
         // If we are in the tutorial, run the tutorial scripts
         if (this.inTutorial) {
             this.runTutorial();
@@ -260,7 +274,6 @@ export class GameScene extends Phaser.Scene {
      */
     private completeRecipe() {
         this.state = GameState.GETTING_RECIPE;
-        this.recipeThingy.nextRecipe();
         this.waterTime = 0;
         this.waterTimer.destroy();
         this.resetTeacups(false);
@@ -290,7 +303,7 @@ export class GameScene extends Phaser.Scene {
                 if (fail) {
                     this.restartLevel();
                 } else {
-                    this.restartLevel();
+                    this.recipeThingy.nextRecipe();
                 }
             }
         });

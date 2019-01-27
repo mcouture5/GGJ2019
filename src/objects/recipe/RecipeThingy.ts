@@ -18,8 +18,14 @@ export interface IRecipeData {
 }
 
 let position = {
-    x: 400,
-    y: 100
+    active: {
+        x: 512,
+        y: 50
+    },
+    inactive: {
+        x: 512,
+        y: -121
+    }
 }
 
 export class RecipeThingy extends Phaser.GameObjects.Group {
@@ -38,6 +44,7 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
     private ingredientIndex: number;
     private currentIngredientObject: Ingredient;
     private currentIngredientMeta: IIngredient;
+    private card: Phaser.GameObjects.Shape;
 
     // Dont trust phaser, keep array order
     private ingredientsInOrder: Ingredient[];
@@ -54,6 +61,10 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
         this.ingredientsInOrder = [];
         this.ingredientIndex = 0;
         this.currentIngredientObject = null;
+
+        // Create and add the card
+        this.card = this.scene.add.rectangle(position.inactive.x, position.inactive.y, 400, 120, 0xffffff)
+            .setStrokeStyle(1, 0x000000);
     }
 
     public nextRecipe() {
@@ -124,6 +135,12 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
 
     private recipeComplete() {
         this.scene.events.emit(RecipeThingy.COMPLETE);
+        // Hide the recipe card
+        this.scene.tweens.add({
+            targets: [this.card],
+            y: position.inactive.y,
+            duration: 200
+        });
     }
 
     private showRecipe() {
@@ -135,8 +152,8 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
             let ingMeta = this.getIngredientMeta(ingredient);
             let ingSprite = new Ingredient({
                 scene: this.scene,
-                x: position.x + (count * 50),
-                y: position.y,
+                x: position.inactive.x + (count * 50),
+                y: position.inactive.y,
                 key: ingMeta.key
             });
             this.add(ingSprite, true);
@@ -145,19 +162,17 @@ export class RecipeThingy extends Phaser.GameObjects.Group {
         }
         // Add a tween for each ingredient
         this.scene.tweens.add({
+            targets: [this.card],
+            y: position.active.y,
+            duration: 1300,
+            ease: 'Bounce',
+            easeParams: [ 3.5 ]
+        });
+        this.scene.tweens.add({
             targets: this.getChildren(),
-            angle: {
-                getEnd: function (target, key, value)
-                {
-                    return target.angle - 180;
-                },
-                getStart: function (target, key, value)
-                {
-                    return target.angle;
-                }
-            },
-            duration: 2000,
-            ease: 'Elastic',
+            y: position.active.y,
+            duration: 1300,
+            ease: 'Bounce.easeOut',
             onComplete: () => {
                 this.getNextIngredient();
             }
